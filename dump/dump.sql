@@ -17,7 +17,6 @@ CREATE DATABASE IF NOT EXISTS `gallery` /*!40100 DEFAULT CHARACTER SET utf8 */;
 USE `gallery`;
 
 -- Dumping structure for table gallery.albums
-DROP TABLE IF EXISTS `albums`;
 CREATE TABLE IF NOT EXISTS `albums` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
@@ -31,8 +30,23 @@ CREATE TABLE IF NOT EXISTS `albums` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- Data exporting was unselected.
+-- Dumping structure for table gallery.files
+CREATE TABLE IF NOT EXISTS `files` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `file_path` varchar(1024) NOT NULL,
+  `thumbnail_path` varchar(1024) DEFAULT NULL,
+  `extension` varchar(64) NOT NULL,
+  `uploaded_by` int(11) NOT NULL,
+  `uploaded_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `size` int(11) NOT NULL,
+  `row_state` smallint(6) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `FK_files_users_uploaded_by` (`uploaded_by`),
+  CONSTRAINT `FK_files_users_uploaded_by` FOREIGN KEY (`uploaded_by`) REFERENCES `users` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- Data exporting was unselected.
 -- Dumping structure for table gallery.photos
-DROP TABLE IF EXISTS `photos`;
 CREATE TABLE IF NOT EXISTS `photos` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL DEFAULT '0',
@@ -50,7 +64,6 @@ CREATE TABLE IF NOT EXISTS `photos` (
 
 -- Data exporting was unselected.
 -- Dumping structure for table gallery.users
-DROP TABLE IF EXISTS `users`;
 CREATE TABLE IF NOT EXISTS `users` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `email` varchar(255) NOT NULL,

@@ -10,10 +10,10 @@ namespace Gallery.DataLayer.Repositories
 {
     public class UserManager : IManager<User>
     {
-        private readonly IDbContext _context;
-        private readonly IPasswordHassher<User> _hasher;
+        private readonly IContext _context;
+        private readonly IPasswordHasher<User> _hasher;
 
-        public UserManager(IDbContext context, IPasswordHassher<User> hasher)
+        public UserManager(IContext context, IPasswordHasher<User> hasher)
         {
             _context = context;
             _hasher = hasher;

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Gallery.DataLayer.Base
 {
-    public interface IPasswordHassher<in T>
+    public interface IPasswordHasher<in T>
     {
         string HashPassword(string password, T salt);
         bool IsValid(string password, string hash, T salt);
