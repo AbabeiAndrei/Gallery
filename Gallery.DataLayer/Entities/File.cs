@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,7 +12,7 @@ using ServiceStack.OrmLite;
 namespace Gallery.DataLayer.Entities
 {
     [Alias("albums")]
-    public class File : IEntity, IHasId<int>
+    public class File : Entity, IHasId<int>
     {
         [Alias("id")]
         [AutoIncrement]
@@ -48,6 +49,14 @@ namespace Gallery.DataLayer.Entities
         [Required]
         [Alias("row_state")]
         [Default((int)RowState.Created)]
-        public RowState RowState { get; set; }
+        public override RowState RowState { get; set; }
+
+        [Pure]
+        public override bool HasAccess(IIdentity identity, Operation operation, object data = null)
+        {
+            var photo = data as Photo;
+
+            return photo == null || photo.HasAccess(identity, operation);
+        }
     }
 }

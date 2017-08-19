@@ -10,8 +10,13 @@ using ServiceStack.OrmLite;
 
 namespace Gallery.DataLayer.Entities
 {
+    public enum UserRole : short
+    {
+        Regular = 0
+    }
+
     [Alias("users")]
-    public class User : IEntity, IHasId<int>
+    public class User : Entity, IIdentity
     {
         [Alias("id")]
         [AutoIncrement]
@@ -38,8 +43,13 @@ namespace Gallery.DataLayer.Entities
         public DateTime CreatedAt { get; set; }
 
         [Required]
+        [Alias("role")]
+        [Default((int)UserRole.Regular)]
+        public UserRole Role { get; set; }
+
+        [Required]
         [Alias("row_state")]
         [Default((int) RowState.Created)]
-        public RowState RowState { get; set; }
+        public override RowState RowState { get; set; }
     }
 }

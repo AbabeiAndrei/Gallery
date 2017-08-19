@@ -51,7 +51,8 @@ namespace Gallery.DataLayer.Startup
                 CreatedAt = DateTime.Now,
                 Email = "admin@local.test",
                 FullName = "Administrator",
-                RowState = RowState.Created
+                RowState = RowState.Created,
+                Role = UserRole.Regular
             };
 
             user.Password = _hasher.HashPassword("password", user);

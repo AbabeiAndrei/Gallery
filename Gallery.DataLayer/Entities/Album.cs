@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -17,7 +18,7 @@ namespace Gallery.DataLayer.Entities
     }
 
     [Alias("albums")]
-    public class Album : IEntity, IHasId<int>
+    public class Album : Entity, IHasId<int>
     {
         [Alias("id")]
         [AutoIncrement]
@@ -45,6 +46,15 @@ namespace Gallery.DataLayer.Entities
         [Required]
         [Alias("row_state")]
         [Default((int)RowState.Created)]
-        public RowState RowState { get; set; }
+        public override RowState RowState { get; set; }
+
+        [Pure]
+        public override bool HasAccess(IIdentity identity, Operation operation, object data = null)
+        {
+            if(operation == Operation.Read)
+                return Privacy == AlbumPrivacy.Public || CreatedBy == identity.Id;
+
+            return CreatedBy == identity.Id;
+        }
     }
 }

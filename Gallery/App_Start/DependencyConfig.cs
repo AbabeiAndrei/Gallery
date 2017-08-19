@@ -1,6 +1,7 @@
 ﻿using System.Web.Http;
 using Autofac;
 using Autofac.Integration.WebApi;
+using Gallery.Managers;
 
 namespace Gallery
 {
@@ -8,13 +9,19 @@ namespace Gallery
     {
         public static IContainer RegisterDependencies(HttpConfiguration configuration)
         {
-            ContainerBuilder builder = new ContainerBuilder();
+            var builder = new ContainerBuilder();
+
+            builder.RegisterType<AuthenticationManager>();
 
             DataLayer.Startup.DependencyConfig.RegisterDependencies(builder);
 
-            IContainer container = builder.Build();
+            var container = builder.Build();
 
-            configuration.DependencyResolver = new AutofacWebApiDependencyResolver(container);
+            var resolver = new AutofacWebApiDependencyResolver(container);
+
+            configuration.DependencyResolver = resolver;
+            
+            GlobalConfiguration.Configuration.DependencyResolver = resolver;
 
             return container;
         }

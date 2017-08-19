@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Autofac;
+﻿using Autofac;
 using Gallery.DataLayer.Base;
+using Gallery.DataLayer.Entities;
+using Gallery.DataLayer.Managers;
 using Gallery.DataLayer.Properties;
 using Gallery.DataLayer.Repositories;
+using Gallery.DataLayer.Utils;
 
 namespace Gallery.DataLayer.Startup
 {
@@ -17,7 +14,12 @@ namespace Gallery.DataLayer.Startup
         {
             builder.RegisterInstance(new DbContext(Settings.Default.ConnectionString))
                    .As<IContext>();
+            builder.RegisterType<UserPasswordHasher>()
+                   .As<IPasswordHasher<User>>();
             builder.RegisterType<UserManager>();
+            builder.RegisterType<FileManager>();
+            builder.RegisterType<AlbumManager>();
+            builder.RegisterType<PhotoManager>();
             builder.RegisterType<DatabaseUpdater>();
         }
     }

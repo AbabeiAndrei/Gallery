@@ -12,8 +12,16 @@ namespace Gallery.DataLayer.Entities.Base
         Deleted = 1
     }
 
+    public enum Operation : short
+    {
+        Read,
+        Update,
+        Delete
+    }
+
     public interface IEntity
     {
         RowState RowState { get; set; }
+        bool HasAccess(IIdentity identity, Operation operation, object data = null);
     }
 }

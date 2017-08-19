@@ -25,7 +25,7 @@ namespace Gallery.DataLayer.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("a")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Server=localhost;Database=gallery;Uid=gallery;Pwd=gallery;")]
         public string ConnectionString {
             get {
                 return ((string)(this["ConnectionString"]));

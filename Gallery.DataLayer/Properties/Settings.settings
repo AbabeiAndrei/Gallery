@@ -3,7 +3,7 @@
   <Profiles />
   <Settings>
     <Setting Name="ConnectionString" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">a</Value>
+      <Value Profile="(Default)">Server=localhost;Database=gallery;Uid=gallery;Pwd=gallery;</Value>
     </Setting>
   </Settings>
 </SettingsFile>

@@ -4,6 +4,7 @@ using System.Web.Mvc;
 using System.Web.Routing;
 using System.Web.Http;
 using Autofac;
+using AutoMapper;
 using Gallery.DataLayer.Startup;
 
 namespace Gallery
@@ -15,8 +16,11 @@ namespace Gallery
             AreaRegistration.RegisterAllAreas();
             GlobalConfiguration.Configure(WebApiConfig.Register);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
+
             var container = DependencyConfig.RegisterDependencies(GlobalConfiguration.Configuration);  
             DatabaseConfig.Config(container.Resolve<DatabaseUpdater>());
-        }
+            
+            Mapper.Initialize(MappingConfig.CreateConfiguration);
+    }
     }
 }
