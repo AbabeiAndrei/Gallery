@@ -31,7 +31,7 @@ namespace Gallery.Controllers
         }
 
         [HttpPost]
-        [Route("login")]
+        [Route("account/login")]
         public IHttpActionResult Login([FromBody] LoginModel model)
         {
             if (model == null)
@@ -48,14 +48,14 @@ namespace Gallery.Controllers
             var context = Request.GetOwinContext();
             var authManager = context.Authentication;
 
-            if(_authManager.Authenticate(user, authManager, model.RemeberMe))
+            if(_authManager.Authenticate(user, authManager, model.RememberMe))
                 return Redirect("/");
 
             return InternalServerError();
         }
 
         [HttpPost]
-        [Route("logout")]
+        [Route("account/logout")]
         public IHttpActionResult Logout()
         {
             var ctx = Request.GetOwinContext();
@@ -67,7 +67,7 @@ namespace Gallery.Controllers
         }
 
         [HttpPost]
-        [Route("register")]
+        [Route("account/register")]
         public IHttpActionResult Register([FromBody]RegisterModel model)
         {
             if (model == null)

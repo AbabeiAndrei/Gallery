@@ -17,6 +17,7 @@ using File = Gallery.DataLayer.Entities.File;
 
 namespace Gallery.Controllers
 {
+    [Route("api/file")]
     public class FileController : ApiController
     {
         public const string FILE_LOCATION = "D:\\Gallery";
@@ -38,6 +39,7 @@ namespace Gallery.Controllers
         }
 
         [HttpGet]
+        [Route("api/file/{id}")]
         public IHttpActionResult Get(int id)
         {
             var userId = Request.GetUserId();

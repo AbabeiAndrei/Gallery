@@ -56,3 +56,9 @@ C:\Users\Andrei\Documents\Visual Studio 2015\Projects\Gallery\Gallery\bin\Servic
 C:\Users\Andrei\Documents\Visual Studio 2015\Projects\Gallery\Gallery\obj\Debug\Gallery.csprojResolveAssemblyReference.cache
 C:\Users\Andrei\Documents\Visual Studio 2015\Projects\Gallery\Gallery\obj\Debug\Gallery.dll
 C:\Users\Andrei\Documents\Visual Studio 2015\Projects\Gallery\Gallery\obj\Debug\Gallery.pdb
+C:\Users\Andrei\Documents\Visual Studio 2015\Projects\Gallery\Gallery\bin\Microsoft.Owin.Security.Cookies.dll
+C:\Users\Andrei\Documents\Visual Studio 2015\Projects\Gallery\Gallery\bin\Microsoft.Owin.Security.dll
+C:\Users\Andrei\Documents\Visual Studio 2015\Projects\Gallery\Gallery\bin\Microsoft.Owin.Security.xml
+C:\Users\Andrei\Documents\Visual Studio 2015\Projects\Gallery\Gallery\bin\Microsoft.Owin.Security.Cookies.xml
+C:\Users\Andrei\Documents\Visual Studio 2015\Projects\Gallery\Gallery\bin\Microsoft.Owin.Host.SystemWeb.dll
+C:\Users\Andrei\Documents\Visual Studio 2015\Projects\Gallery\Gallery\bin\Microsoft.Owin.Host.SystemWeb.xml

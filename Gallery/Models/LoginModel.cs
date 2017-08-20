@@ -14,6 +14,6 @@ namespace Gallery.Models
         [Required]
         public string Password { get; set; }
 
-        public bool RemeberMe { get; set; }
+        public bool RememberMe { get; set; }
     }
 }

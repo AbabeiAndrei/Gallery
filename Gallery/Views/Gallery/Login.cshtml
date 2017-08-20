@@ -1,0 +1,37 @@
+﻿@{
+    ViewBag.Title = "Login";
+    Layout = "~/Views/_LayoutPage.cshtml";
+}
+
+<script src="~/app/controllers/loginController.js"></script>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-4"></div>
+        <div class="col-md-4" ng-controller="loginController">
+            <form class="form-horizontal">
+                <div class="form-group">
+                    <!-- Username -->
+                    <label class="control-label">Email</label>
+                    <input type="email" class="form-control" ng-model="email" />
+                </div>
+                <div class="form-group">
+                    <!-- Password-->
+                    <label class="control-label">Password</label>
+                    <input type="password" class="form-control" ng-model="password" />
+                </div>
+                <div class="checkbox">
+                    <label><input type="checkbox" value="" ng-model="rememberMe"/>RemeberMe</label>
+                </div>
+                <div style="margin-top: 10px">
+                    <button class="btn btn-primary" ng-click="performLogin()" >Login</button>
+                    <a class="btn  pull-right" href="/Gallery/Register">Register</a>
+                </div>
+                <div class="alert alert-danger" role="alert" ng-show="{{(errorUi || '').trim().length > 0}}" style="margin-top: 40px">
+                    {{errorUi}}
+                </div>
+            </form>
+        </div>
+        <div class="col-md-4"></div>
+    </div>
+</div>

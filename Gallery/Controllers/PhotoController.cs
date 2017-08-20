@@ -12,6 +12,7 @@ using Gallery.Models;
 
 namespace Gallery.Controllers
 {
+    [Route("api/photo")]
     public class PhotoController : ApiController
     {
         private readonly PhotoManager _photoManager;
@@ -38,6 +39,7 @@ namespace Gallery.Controllers
         }
 
         [HttpGet]
+        [Route("api/photo/{id}")]
         public IHttpActionResult Get(int id)
         {
             var userId = Request.GetUserId();
@@ -82,6 +84,7 @@ namespace Gallery.Controllers
         }
 
         [HttpPut]
+        [Route("api/photo/{id}")]
         public IHttpActionResult Update(int id, [FromBody]PhotoModel model)
         {
             var userId = Request.GetUserId();

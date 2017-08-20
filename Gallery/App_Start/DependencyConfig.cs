@@ -1,4 +1,5 @@
-﻿using System.Web.Http;
+﻿using System.Reflection;
+using System.Web.Http;
 using Autofac;
 using Autofac.Integration.WebApi;
 using Gallery.Managers;
@@ -11,9 +12,14 @@ namespace Gallery
         {
             var builder = new ContainerBuilder();
 
+            builder.RegisterApiControllers(Assembly.GetExecutingAssembly());
+
             builder.RegisterType<AuthenticationManager>();
 
             DataLayer.Startup.DependencyConfig.RegisterDependencies(builder);
+
+            builder.RegisterWebApiFilterProvider(configuration);
+            builder.RegisterWebApiModelBinderProvider();
 
             var container = builder.Build();
 
@@ -21,8 +27,6 @@ namespace Gallery
 
             configuration.DependencyResolver = resolver;
             
-            GlobalConfiguration.Configuration.DependencyResolver = resolver;
-
             return container;
         }
 

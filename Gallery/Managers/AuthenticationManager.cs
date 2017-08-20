@@ -60,15 +60,60 @@ namespace Gallery.Managers
     {
         public static int GetUserId(this HttpRequestMessage request)
         {
-            var context = request.GetOwinContext();
-            var user = context.Authentication.User;
-            var claimIdentity = user.FindFirst(ClaimTypes.NameIdentifier);
-            int userId;
+            try
+            {
+                var context = request.GetOwinContext();
+            
+                if (context.Authentication == null)
+                    return -1;
 
-            if (claimIdentity == null || !int.TryParse(claimIdentity.Value, out userId))
+                var user = context.Authentication.User;
+                var claimIdentity = user.FindFirst(ClaimTypes.NameIdentifier);
+                int userId;
+
+                if (claimIdentity == null || !int.TryParse(claimIdentity.Value, out userId))
+                    return -1;
+
+                return userId;
+            }
+            catch (Exception)
+            {
                 return -1;
+            }
+        }
 
-            return userId;
+        public static bool IsLoggedIn(this HttpRequestMessage request)
+        {
+            return GetUserId(request) > 0;
+        }
+
+        public static int GetUserId(this HttpRequestBase request)
+        {
+            try
+            {
+                var context = request.GetOwinContext();
+
+                if (context.Authentication == null)
+                    return -1;
+
+                var user = context.Authentication.User;
+                var claimIdentity = user.FindFirst(ClaimTypes.NameIdentifier);
+                int userId;
+
+                if (claimIdentity == null || !int.TryParse(claimIdentity.Value, out userId))
+                    return -1;
+
+                return userId;
+            }
+            catch (Exception)
+            {
+                return -1;
+            }
+        }
+
+        public static bool IsLoggedIn(this HttpRequestBase request)
+        {
+            return GetUserId(request) > 0;
         }
     }
 }

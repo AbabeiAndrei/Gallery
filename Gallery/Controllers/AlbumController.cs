@@ -13,7 +13,7 @@ using Gallery.Models;
 
 namespace Gallery.Controllers
 {
-    [Route("album")]
+    [Route("api/album")]
     public class AlbumController : ApiController
     {
         private readonly AlbumManager _albumManager;
@@ -39,7 +39,8 @@ namespace Gallery.Controllers
         }
 
         [HttpGet]
-        public IHttpActionResult Get(int id)
+        [Route("api/album/{id}")]
+        public IHttpActionResult GetById(int id)
         {
             var userId = Request.GetUserId();
 
@@ -83,6 +84,7 @@ namespace Gallery.Controllers
         }
         
         [HttpPut]
+        [Route("api/album/{id}")]
         public IHttpActionResult Update(int id, [FromBody]AlbumModel model)
         {
             var userId = Request.GetUserId();
