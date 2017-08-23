@@ -379,6 +379,8 @@
     <Compile Include="Controllers\GalleryController.cs" />
     <Compile Include="Controllers\PhotoController.cs" />
     <Compile Include="Managers\AutofacDependencyResolver.cs" />
+    <Compile Include="Models\DiscoveryAlbumViewModel.cs" />
+    <Compile Include="Models\DiscoveryPhotoViewModel.cs" />
     <Compile Include="Models\FileViewModel.cs" />
     <Compile Include="Models\PhotoModel.cs" />
     <Compile Include="Global.asax.cs">

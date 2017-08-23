@@ -5,21 +5,21 @@
 
 <div class="container">
     <div class="row" ng-controller="discoveryController">
-        <div ng-show="!items" class="text-center">
+        <div ng-show="!items || items.length === 0" class="text-center">
             No item to display
         </div>
         <div ng-repeat="item in items">
             <div class="profilePicture pull-left">
-                <img ng-src="item.profilePicture"/>
+                <img ng-src="{{item.profilePicture}}" alt="User{{item.userName}}"/>
             </div>
             <div class="pull-right">
                 <strong>{{item.userName}} </strong>
                 <span>{{item.action}}</span>
-                <strong>{{item.album}}</strong>
+                <strong>{{item.name}}</strong>
             </div>
-            <div ng-repeat="photo in item.photos">
+            <div ng-repeat="photo in item.photos" ng-if="item.photos">
                 <a ng-click="showPhoto(photo)">
-                    <img ng-src="photo.url"/>
+                    <img ng-src="{{photo.url}}" alt="img{{$index}}"/>
                 </a>
             </div>
         </div>

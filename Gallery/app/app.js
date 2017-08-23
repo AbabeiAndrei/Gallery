@@ -5,9 +5,11 @@ app.controller('discoveryController',
         '$scope',
         '$http',
         function ($scope, $http) {
-            $http.get('api/album/discovery')
+            $http.get('album/discovery')
                  .then(function(result) {
-                    
+                    $scope.items = result.data;
+                }, function() {
+                             
                 });
         }
     ]);
@@ -16,7 +18,7 @@ app.controller('galleryController',
         '$scope',
         '$location',
         function ($scope, $location) {
-            $scope.isOnPhoto = $location.url().contains('photos');
+            $scope.isOnPhoto = $location.absUrl().includes('Photos');
         }
     ]);
 

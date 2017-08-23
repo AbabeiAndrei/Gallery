@@ -23,6 +23,8 @@ namespace Gallery.Managers
 
         public const string APPLICATION_COKIE_AUTH = DefaultAuthenticationTypes.ApplicationCookie;
 
+        public const string APPLICATION_COKIE_USER = "userToken";
+
         public bool Authenticate(User user, HttpRequestMessage request, bool isPersistent)
         {
             var context = request.GetOwinContext();
@@ -77,17 +79,19 @@ namespace Gallery.Managers
         {
             try
             {
-                var context = request.GetOwinContext();
+                //var context = request.GetOwinContext();
 
-                var user = context?.Authentication?.User;
+                //var user = context?.Authentication?.User;
 
-                if (user == null)
-                    return -1;
+                //if (user == null)
+                //    return -1;
 
-                var claimIdentity = user.FindFirst(ClaimTypes.NameIdentifier);
+                //var claimIdentity = user.FindFirst(ClaimTypes.NameIdentifier);
+
+                var cookie = request.Headers.GetCookies(AuthenticationManager.APPLICATION_COKIE_USER).FirstOrDefault();
                 int userId;
 
-                if (claimIdentity == null || !int.TryParse(claimIdentity.Value, out userId))
+                if (cookie == null || !int.TryParse(cookie[AuthenticationManager.APPLICATION_COKIE_USER].Value, out userId))
                     return -1;
 
                 return userId;
@@ -112,13 +116,18 @@ namespace Gallery.Managers
                 if (context.Authentication == null)
                     return -1;
 
-                context.Authentication.SignIn();
+                //var user = context.Authentication.User;
+                //var claimIdentity = user.FindFirst(ClaimTypes.NameIdentifier);
+                //int userId;
 
-                var user = context.Authentication.User;
-                var claimIdentity = user.FindFirst(ClaimTypes.NameIdentifier);
+                //if (claimIdentity == null || !int.TryParse(claimIdentity.Value, out userId))
+                //    return -1;
+
+
+                var cookie = request.Cookies.Get(AuthenticationManager.APPLICATION_COKIE_USER);
                 int userId;
 
-                if (claimIdentity == null || !int.TryParse(claimIdentity.Value, out userId))
+                if (cookie == null || !int.TryParse(cookie.Value, out userId))
                     return -1;
 
                 return userId;

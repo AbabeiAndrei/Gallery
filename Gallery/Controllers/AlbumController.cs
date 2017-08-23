@@ -15,7 +15,7 @@ using Gallery.Models;
 
 namespace Gallery.Controllers
 {
-    [Route("api/album")]
+    [Route("Gallery/album")]
     public class AlbumController : ApiController
     {
         private readonly AlbumManager _albumManager;
@@ -40,13 +40,21 @@ namespace Gallery.Controllers
             if(userId < 0)
                 return Unauthorized();
             
-            var albums = _albumManager.GetUserAlbums(userId);
+            var albums = _albumManager.GetUserAlbums(userId).ToList()
+                                      .Select(Mapper.Map<AlbumViewModel>)
+                                      .Select(avm => new DiscoveryAlbumViewModel(avm)
+                                      {
+                                          ProfilePicture = "",
+                                          Action = "Created",
+                                          UserName = "",
+                                          Photos = null//todo
+                                      });
 
-            return Ok(albums.Select(Mapper.Map<AlbumViewModel>));
+            return Ok(albums);
         }
 
         [HttpGet]
-        [Route("api/album/discovery")]
+        [Route("Gallery/album/discovery")]
         public IHttpActionResult Discovery()
         {
             var userId = Request.GetUserId();
@@ -60,7 +68,7 @@ namespace Gallery.Controllers
         }
 
         [HttpGet]
-        [Route("api/album/{id}")]
+        [Route("Gallery/album/{id}")]
         public IHttpActionResult GetById(int id)
         {
             var userId = Request.GetUserId();
@@ -105,7 +113,7 @@ namespace Gallery.Controllers
         }
         
         [HttpPut]
-        [Route("api/album/{id}")]
+        [Route("Gallery/album/{id}")]
         public IHttpActionResult Update(int id, [FromBody]AlbumModel model)
         {
             var userId = Request.GetUserId();

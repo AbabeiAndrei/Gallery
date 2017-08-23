@@ -6,6 +6,8 @@ using System.Web.Http;
 using Autofac;
 using AutoMapper;
 using Gallery.DataLayer.Startup;
+using Newtonsoft.Json.Converters;
+using Newtonsoft.Json.Serialization;
 
 namespace Gallery
 {
@@ -16,6 +18,7 @@ namespace Gallery
             AreaRegistration.RegisterAllAreas();
             GlobalConfiguration.Configure(WebApiConfig.Register);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
-    }
+        }
+
     }
 }

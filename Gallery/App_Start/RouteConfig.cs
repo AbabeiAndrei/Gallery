@@ -16,7 +16,7 @@ namespace Gallery
             routes.MapRoute("Home",
                             "{controller}/{action}",
                             new { controller = "Gallery", action = "Discover" });
-
+            
 
             //routes.MapRoute("Default",
             //                "Home/Index/{page}",

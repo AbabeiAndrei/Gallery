@@ -30,6 +30,8 @@ namespace Gallery.Controllers
         [AllowAnonymous]
         public ActionResult Login()
         {
+            if (Request.IsLoggedIn())
+                return RedirectToAction("Discover");
             return View();
         }
 

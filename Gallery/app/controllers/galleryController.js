@@ -3,6 +3,6 @@
         '$scope',
         '$location',
         function ($scope, $location) {
-            $scope.isOnPhoto = $location.url().contains('photos');
+            $scope.isOnPhoto = $location.absUrl().includes('Photos');
         }
     ]);

@@ -3,7 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Security.Claims;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Results;
 using Autofac;
@@ -15,6 +18,7 @@ using Gallery.DataLayer.Repositories;
 using Gallery.Managers;
 using Gallery.Models;
 using Microsoft.Owin.Security;
+using AuthenticationManager = Gallery.Managers.AuthenticationManager;
 
 namespace Gallery.Controllers
 {
@@ -41,37 +45,65 @@ namespace Gallery.Controllers
 
         [HttpPost]
         [Route("gallery/account/login")]
-        public IHttpActionResult Login([FromBody] LoginModel model)
+        public async Task<HttpResponseMessage> Login([FromBody] LoginModel model)
         {
             if (model == null)
-                return BadRequest("Model cannot be null");
+            {
+                return await BadRequest("Model cannot be null").ExecuteAsync(CancellationToken.None);
+            }
+
 
             if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+                return await BadRequest(ModelState).ExecuteAsync(CancellationToken.None);
 
             var user = _userManager.Login(model.Email, model.Password);
 
             if (user == null)
-                return NotFound();
-
+                return await NotFound().ExecuteAsync(CancellationToken.None);
+            
             if (_authManager.Authenticate(user, Request, model.RememberMe))
             {
-                return Ok();
+                var resp = new HttpResponseMessage(HttpStatusCode.OK);
+
+                var cookie = new CookieHeaderValue(AuthenticationManager.APPLICATION_COKIE_USER, user.Id.ToString())
+                {
+                    Expires = DateTimeOffset.Now.AddDays(1),
+                    Domain = Request.RequestUri.Host,
+                    Path = "/"
+                };
+
+
+                resp.Headers.AddCookies(new[] { cookie });
+                return resp;
             }
 
-            return InternalServerError();
+            return await InternalServerError().ExecuteAsync(CancellationToken.None);
         }
 
         [HttpPost]
         [Route("gallery/account/logout")]
-        public IHttpActionResult Logout()
+        public async Task<HttpResponseMessage> Logout()
         {
             var ctx = Request.GetOwinContext();
 
-            if(_authManager.SingOut(ctx.Authentication))
-                return Ok();
+            if (_authManager.SingOut(ctx.Authentication))
+            {
 
-            return InternalServerError();
+                var resp = new HttpResponseMessage(HttpStatusCode.OK);
+
+                var cookie = new CookieHeaderValue(AuthenticationManager.APPLICATION_COKIE_USER, "")
+                {
+                    Expires = DateTimeOffset.Now.AddDays(-1),
+                    Domain = Request.RequestUri.Host,
+                    Path = "/"
+                };
+
+
+                resp.Headers.AddCookies(new[] { cookie });
+                return resp;
+            }
+
+            return await InternalServerError().ExecuteAsync(CancellationToken.None);
         }
 
         [HttpPost]

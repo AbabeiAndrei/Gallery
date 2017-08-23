@@ -3,9 +3,11 @@
         '$scope',
         '$http',
         function ($scope, $http) {
-            $http.get('api/album/discovery')
+            $http.get('album/discovery')
                  .then(function(result) {
-                    
+                    $scope.items = result.data;
+                }, function() {
+                             
                 });
         }
     ]);
