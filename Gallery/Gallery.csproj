@@ -14,7 +14,7 @@
     <RootNamespace>Gallery</RootNamespace>
     <AssemblyName>Gallery</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
-    <UseIISExpress>true</UseIISExpress>
+    <UseIISExpress>false</UseIISExpress>
     <IISExpressSSLPort />
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
@@ -151,7 +151,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="app\app.js" />
     <Content Include="app\controllers\loginController.js" />
+    <Content Include="app\controllers\registerController.js" />
+    <Content Include="app\init.js" />
     <Content Include="app\partials\discover.html" />
     <Content Include="app\partials\login.html" />
     <Content Include="app\partials\photos.html" />
@@ -301,6 +304,7 @@
     <Content Include="bower_components\jquery\src\var\toString.js" />
     <Content Include="bower_components\jquery\src\wrap.js" />
     <Content Include="Global.asax" />
+    <Content Include="Gruntfile.js" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
@@ -456,6 +460,7 @@
     <Content Include="Views\_LayoutPage.cshtml" />
     <Content Include="Views\Gallery\Login.cshtml" />
     <Content Include="Views\Gallery\Register.cshtml" />
+    <Content Include="package.json" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -466,6 +471,7 @@
   <ItemGroup>
     <Folder Include="app\css\" />
     <Folder Include="app\directives\" />
+    <Folder Include="app\filters\" />
     <Folder Include="app\libs\" />
     <Folder Include="app\services\" />
     <Folder Include="App_Data\" />
@@ -492,7 +498,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>42855</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:42855/</IISUrl>
+          <IISUrl>http://gallery.code40.local</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

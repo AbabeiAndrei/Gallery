@@ -49,7 +49,6 @@ namespace Gallery.DataLayer.Entities
 
         [Required]
         [Alias("row_state")]
-        [Default((int) RowState.Created)]
         public override RowState RowState { get; set; }
     }
 }

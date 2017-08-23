@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ServiceStack.DataAnnotations;
 
 namespace Gallery.DataLayer.Entities.Base
 {
+    [EnumAsInt]
     public enum RowState : short
     {
         Created = 0,
