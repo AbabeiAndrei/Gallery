@@ -4,10 +4,12 @@ using System.Linq;
 using System.Net.Http;
 using System.Security.Claims;
 using System.Web.Http;
+using Autofac;
 using AutoMapper;
 using Gallery.DataLayer.Entities;
 using Gallery.DataLayer.Entities.Base;
 using Gallery.DataLayer.Managers;
+using Gallery.DataLayer.Repositories;
 using Gallery.Managers;
 using Gallery.Models;
 
@@ -18,6 +20,11 @@ namespace Gallery.Controllers
     {
         private readonly AlbumManager _albumManager;
         private readonly AuthenticationManager _authManager;
+
+        public AlbumController() 
+            : this(Startup.Resolver.Resolve<AlbumManager>(), Startup.Resolver.Resolve<AuthenticationManager>())
+        {
+        }
 
         public AlbumController(AlbumManager albumManager, AuthenticationManager authManager)
         {
@@ -34,6 +41,20 @@ namespace Gallery.Controllers
                 return Unauthorized();
             
             var albums = _albumManager.GetUserAlbums(userId);
+
+            return Ok(albums.Select(Mapper.Map<AlbumViewModel>));
+        }
+
+        [HttpGet]
+        [Route("api/album/discovery")]
+        public IHttpActionResult Discovery()
+        {
+            var userId = Request.GetUserId();
+
+            if (userId < 0)
+                return Unauthorized();
+
+            var albums = _albumManager.GetAll().Where(a => a.Privacy == AlbumPrivacy.Public);
 
             return Ok(albums.Select(Mapper.Map<AlbumViewModel>));
         }

@@ -16,11 +16,6 @@ namespace Gallery
             AreaRegistration.RegisterAllAreas();
             GlobalConfiguration.Configure(WebApiConfig.Register);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
-
-            var container = DependencyConfig.RegisterDependencies(GlobalConfiguration.Configuration);  
-            DatabaseConfig.Config(container.Resolve<DatabaseUpdater>());
-            
-            Mapper.Initialize(MappingConfig.CreateConfiguration);
     }
     }
 }

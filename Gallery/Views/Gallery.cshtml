@@ -1,17 +1,27 @@
-﻿@{
-    Layout = null;
-}
-
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 
 <html>
 <head>
     <meta name="viewport" content="width=device-width" />
-    <title>Gallery</title>
+    <title>@ViewBag.Title</title>
+    <link href="~/bower_components/bootstrap/dist/css/bootstrap.css" type="text/css" rel="stylesheet" />
+    <script src="~/bower_components/angular/angular.js"></script>
+    <script src="~/app/app.js"></script>
 </head>
-<body>
-    <div>
-        @RenderBody()
+<body ng-app="galleryApp">
+    <div class="page-header" ng-controller="galleryController">
+        <h1>
+            <a href="/" class="btn" style="font: 100 35px arial, sans-serif; margin-left: 25px">Gallery</a>
+        </h1>
+        <div>
+            <a href="Gallery/Photos.cshtml" class="btn" ng-class="isOnPhoto: btn-active">Albume</a>
+            <a href="Gallery/Discover.cshtml" class="btn" ng-class="!isOnPhoto: btn-active">Descopera</a>
+        </div>
+    </div>
+    <div class="container">
+        <div class="row">
+            @RenderBody()
+        </div>
     </div>
 </body>
 </html>

@@ -3,12 +3,10 @@
     Layout = "~/Views/_LayoutPage.cshtml";
 }
 
-<script src="~/app/controllers/registerController.js"></script>
-
 <div class="container">
     <div class="row">
         <div class="col-md-4"></div>
-        <div class="col-md-4" ng-controller="loginController">
+        <div class="col-md-4" ng-controller="registerController">
             <form class="form-horizontal">
                 <div class="form-group">
                     <label class="control-label">Nume</label>
@@ -27,9 +25,9 @@
                     <input type="password" class="form-control" ng-model="password2" />
                 </div>
                 <div style="margin-top: 10px">
-                    <button class="btn btn-primary" ng-click="performRegister()">Register</button>
+                    <button class="btn btn-primary" ng-click="performRegister()">Inregistrare</button>
                 </div>
-                <div class="alert alert-danger" role="alert" ng-show="{{(errorUi || '').trim().length > 0}}" style="margin-top: 40px">
+                <div class="alert alert-danger" role="alert" ng-show="errorUi" style="margin-top: 40px">
                     {{errorUi}}
                 </div>
             </form>

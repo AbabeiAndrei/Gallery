@@ -7,6 +7,7 @@ using System.Web;
 using Gallery.DataLayer.Base;
 using Gallery.DataLayer.Entities;
 using Gallery.DataLayer.Entities.Base;
+using Microsoft.AspNet.Identity;
 using Microsoft.Owin.Security;
 
 namespace Gallery.Managers
@@ -20,7 +21,17 @@ namespace Gallery.Managers
             _context = context;
         }
 
-        public const string APPLICATION_COKIE_AUTH = "ApplicationCookie";
+        public const string APPLICATION_COKIE_AUTH = DefaultAuthenticationTypes.ApplicationCookie;
+
+        public bool Authenticate(User user, HttpRequestMessage request, bool isPersistent)
+        {
+            var context = request.GetOwinContext();
+            var authManager = context.Authentication;
+
+            var result = Authenticate(user, authManager, isPersistent);
+
+            return result;
+        }
 
         public bool Authenticate(User user, IAuthenticationManager manager, bool isPersistent)
         {
@@ -36,8 +47,12 @@ namespace Gallery.Managers
 
             manager.SignIn(new AuthenticationProperties
                            {
-                               IsPersistent = isPersistent
+                               AllowRefresh = true,
+                               IsPersistent = isPersistent,
+                               ExpiresUtc = DateTimeOffset.Now.AddDays(7)
                            }, identity);
+
+
 
             return true;
         }
@@ -63,11 +78,12 @@ namespace Gallery.Managers
             try
             {
                 var context = request.GetOwinContext();
-            
-                if (context.Authentication == null)
+
+                var user = context?.Authentication?.User;
+
+                if (user == null)
                     return -1;
 
-                var user = context.Authentication.User;
                 var claimIdentity = user.FindFirst(ClaimTypes.NameIdentifier);
                 int userId;
 
@@ -95,6 +111,8 @@ namespace Gallery.Managers
 
                 if (context.Authentication == null)
                     return -1;
+
+                context.Authentication.SignIn();
 
                 var user = context.Authentication.User;
                 var claimIdentity = user.FindFirst(ClaimTypes.NameIdentifier);

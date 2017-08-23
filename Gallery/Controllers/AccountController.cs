@@ -6,22 +6,31 @@ using System.Net.Http;
 using System.Security.Claims;
 using System.Web.Http;
 using System.Web.Http.Results;
+using Autofac;
+using Gallery.DataLayer;
 using Gallery.DataLayer.Base;
 using Gallery.DataLayer.Entities;
 using Gallery.DataLayer.Entities.Base;
 using Gallery.DataLayer.Repositories;
+using Gallery.Managers;
 using Gallery.Models;
 using Microsoft.Owin.Security;
 
 namespace Gallery.Controllers
 {
-    [Route("account")]
+    [Route("gallery/account")]
     public class AccountController : ApiController
     {
-
         private readonly UserManager _userManager;
         private readonly IPasswordHasher<User> _passwordHasher;
         private readonly Managers.AuthenticationManager _authManager;
+
+        public AccountController()
+            : this(Startup.Resolver.Resolve<UserManager>(),
+                   Startup.Resolver.Resolve<IPasswordHasher<User>>(),
+                   Startup.Resolver.Resolve<Managers.AuthenticationManager>())
+        {
+        }
 
         public AccountController(UserManager userManager, IPasswordHasher<User> passwordHasher, Managers.AuthenticationManager authManager)
         {
@@ -31,7 +40,7 @@ namespace Gallery.Controllers
         }
 
         [HttpPost]
-        [Route("account/login")]
+        [Route("gallery/account/login")]
         public IHttpActionResult Login([FromBody] LoginModel model)
         {
             if (model == null)
@@ -45,29 +54,28 @@ namespace Gallery.Controllers
             if (user == null)
                 return NotFound();
 
-            var context = Request.GetOwinContext();
-            var authManager = context.Authentication;
-
-            if(_authManager.Authenticate(user, authManager, model.RememberMe))
-                return Redirect("/");
+            if (_authManager.Authenticate(user, Request, model.RememberMe))
+            {
+                return Ok();
+            }
 
             return InternalServerError();
         }
 
         [HttpPost]
-        [Route("account/logout")]
+        [Route("gallery/account/logout")]
         public IHttpActionResult Logout()
         {
             var ctx = Request.GetOwinContext();
 
             if(_authManager.SingOut(ctx.Authentication))
-                return Redirect("/login");
+                return Ok();
 
             return InternalServerError();
         }
 
         [HttpPost]
-        [Route("account/register")]
+        [Route("gallery/account/register")]
         public IHttpActionResult Register([FromBody]RegisterModel model)
         {
             if (model == null)
@@ -92,7 +100,7 @@ namespace Gallery.Controllers
             
             _userManager.Add(user);
 
-            return Redirect("/login");
+            return Ok();
         }
     }
 }

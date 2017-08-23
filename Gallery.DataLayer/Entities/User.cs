@@ -10,6 +10,7 @@ using ServiceStack.OrmLite;
 
 namespace Gallery.DataLayer.Entities
 {
+    [EnumAsInt]
     public enum UserRole : short
     {
         Regular = 0

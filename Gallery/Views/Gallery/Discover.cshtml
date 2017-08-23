@@ -3,4 +3,26 @@
     Layout = "~/Views/Gallery.cshtml";
 }
 
-<h2>@ViewBag.Title</h2>
+<div class="container">
+    <div class="row" ng-controller="discoveryController">
+        <div ng-show="!items" class="text-center">
+            No item to display
+        </div>
+        <div ng-repeat="item in items">
+            <div class="profilePicture pull-left">
+                <img ng-src="item.profilePicture"/>
+            </div>
+            <div class="pull-right">
+                <strong>{{item.userName}} </strong>
+                <span>{{item.action}}</span>
+                <strong>{{item.album}}</strong>
+            </div>
+            <div ng-repeat="photo in item.photos">
+                <a ng-click="showPhoto(photo)">
+                    <img ng-src="photo.url"/>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+

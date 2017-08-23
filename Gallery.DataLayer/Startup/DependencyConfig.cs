@@ -12,15 +12,6 @@ namespace Gallery.DataLayer.Startup
     {
         public static void RegisterDependencies(ContainerBuilder builder)
         {
-            builder.RegisterInstance(new DbContext(Settings.Default.ConnectionString))
-                   .As<IContext>();
-            builder.RegisterType<UserPasswordHasher>()
-                   .As<IPasswordHasher<User>>();
-            builder.RegisterType<UserManager>();
-            builder.RegisterType<FileManager>();
-            builder.RegisterType<AlbumManager>();
-            builder.RegisterType<PhotoManager>();
-            builder.RegisterType<DatabaseUpdater>();
         }
     }
 }
