@@ -1,0 +1,62 @@
+﻿.photoConainer {
+
+}
+
+.photoHeader {
+
+}
+
+.albums {
+}
+
+.photos {
+
+}
+
+.photoSearchBox {
+    width: 250px;
+}
+
+.stylish-input-group .input-group-addon{
+    background: white !important; 
+}
+.stylish-input-group .form-control{
+    border-right:0; 
+    box-shadow:0 0 0; 
+    border-color:#cccccc;
+}
+.stylish-input-group button{
+    border:0;
+    background:transparent;
+}
+
+.albumItem {
+    text-decoration: none;
+    color: black;
+    cursor: pointer
+}
+
+.albumItem:hover {
+    text-decoration: none;
+    color: black
+}
+
+.albumItem div {
+    width: 200px;
+    margin: 10px;
+    height: 150px;
+    background-color: whitesmoke;
+}
+
+.albumItem div.active {
+    border: solid black 1px
+}
+
+.albumItem div h2 {
+    text-align: center;
+    font-size: 25px
+}
+
+.albumItem div span {
+    font-size: 18px
+}

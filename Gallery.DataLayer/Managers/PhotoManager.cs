@@ -47,5 +47,10 @@ namespace Gallery.DataLayer.Managers
         {
             return _context.GetAll<Photo>(p => p.UploadedBy == userId && p.RowState != RowState.Deleted);
         }
+
+        public IEnumerable<Photo> GetAlbumPhotos(int albumId)
+        {
+            return _context.GetAll<Photo>(p => p.AlbumId == albumId && p.RowState != RowState.Deleted);
+        }
     }
 }

@@ -11,7 +11,7 @@ using ServiceStack.OrmLite;
 
 namespace Gallery.DataLayer.Entities
 {
-    [Alias("albums")]
+    [Alias("files")]
     public class File : Entity, IHasId<int>
     {
         [Alias("id")]

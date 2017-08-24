@@ -46,6 +46,11 @@ namespace Gallery.DataLayer.Managers
             _context.Delete<Album>(id);
         }
 
+        public IEnumerable<Album> GetPublicAlbums(int userId)
+        {
+            return _context.GetAll<Album>(a => a.CreatedBy != userId && a.Privacy == AlbumPrivacy.Public && a.RowState != RowState.Deleted);
+        }
+
         public IEnumerable<Album> GetUserAlbums(int userId)
         {
             return _context.GetAll<Album>(a => a.CreatedBy == userId && a.RowState != RowState.Deleted);

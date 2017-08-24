@@ -1,5 +1,100 @@
 
-var app = angular.module('galleryApp', []);
+var app = angular.module('galleryApp', ['ui.bootstrap']);
+
+var modalControllerTemplates = {
+    'carouselModal': '/app/partials/modalCarousel.html'
+};
+
+app.provider('routeConfigurator', function () {
+
+    var self = this;
+
+    this.$get = [function () {
+        return self;
+    }];
+
+    self.modalMapping = function (key) {
+        return modalControllerTemplates[key];
+    };
+});
+app.directive('genericModal', ['$rootScope', '$uibModal', 'routeConfigurator', function ($rootScope, $uibModal, routeConfigurator) {
+    return {
+        restrict: 'A',
+        replace: false,
+        link: function (scope, element, attributes) {
+            $(element).click(function () {
+                var instanceOptions = {
+                    animation: true
+                };
+
+                if (attributes.genericModalTemplateUrl) {
+                    instanceOptions.templateUrl = attributes.genericModalTemplateUrl;
+                } else {
+                    instanceOptions.templateUrl = routeConfigurator.modalMapping(attributes.genericModal);
+                }
+
+                instanceOptions.resolve = {
+                    settings: function () {
+                        if (attributes.genericModalData !== 'undefined' && attributes.genericModalData !== null) {
+                            return scope.$eval(attributes.genericModalData);
+                        }
+                        return 'invalid';
+                    }
+                };
+
+                if (attributes.size !== undefined) {
+                    instanceOptions.size = attributes.size;
+                }
+                instanceOptions.controller = attributes.genericModal;
+
+                var modalInstance = $uibModal.open(instanceOptions);
+                modalInstance.result.then(function () {
+                    if (attributes.genericModalSuccess !== undefined && attributes.genericModalSuccess !== null)
+                        scope.$eval(attributes.genericModalSuccess);
+                }, function () {
+                    if (attributes.genericModalCancel !== undefined && attributes.genericModalCancel !== null)
+                        scope.$eval(attributes.genericModalCancel);
+                });
+            });
+        }
+    };
+}]);
+app.controller('carouselModal',
+    [
+        '$scope',
+        '$http',
+        '$uibModalInstance',
+        function ($scope, $http, $uibModalInstance) {
+
+            $scope.close = function () {
+                $uibModalInstance.close(null);
+            }
+
+            if (!$scope.$resolve.settings) {
+                $scope.close();
+            }
+
+            $scope.album = $scope.$resolve.settings || {};
+
+            var id = $scope.album.id;
+            $scope.activeItem = 0;
+
+            $http.get('album/' + $scope.album.albumId)
+                .then(function (result) {
+                    $scope.album = result.data;
+                    $scope.album.items = $scope.album.photos || [];
+
+                    for(var i = 0 ; i < $scope.album.items.length ; i++){
+                        if ($scope.album.items[i].id === id) {
+                            $scope.activeItem = i;
+                            break;
+                        }
+                    }
+                }, function () {
+
+                });
+        }
+]);
 app.controller('discoveryController',
     [
         '$scope',
@@ -9,7 +104,7 @@ app.controller('discoveryController',
                  .then(function(result) {
                     $scope.items = result.data;
                 }, function() {
-                             
+                              
                 });
         }
     ]);
@@ -62,6 +157,36 @@ app.controller('loginController',
         };
     }
 ]);
+app.controller('photoController',
+    [
+        '$scope',
+        '$location',
+        function ($scope, $location) {
+            $scope.searchName = '';
+            $scope.albums = [
+                {
+                    name: 'album 1',
+                    photos:[]
+                },
+                {
+                    name: 'album 2',
+                    photos: []
+                },
+                {
+                    name: 'album 3',
+                    photos: []
+                }
+            ];
+
+            $scope.selectAlbum = function (album) {
+                if ($scope.selectedAlbum) {
+                    $scope.selectedAlbum.selected = false;
+                }
+                $scope.selectedAlbum = album;
+                $scope.selectedAlbum.selected = true;
+            }
+        }
+    ]);
 app.controller('registerController',
 [
     '$scope',

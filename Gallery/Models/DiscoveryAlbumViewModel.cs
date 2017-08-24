@@ -26,6 +26,8 @@ namespace Gallery.Models
 
         public string Action { get; set; }
 
+        public int PhotoCount { get; set; }
+
         public IEnumerable<PhotoViewModel> Photos { get; set; }
     }
 }

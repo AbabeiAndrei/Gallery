@@ -10,6 +10,7 @@ using Gallery.DataLayer.Entities;
 using Gallery.DataLayer.Entities.Base;
 using Gallery.DataLayer.Managers;
 using Gallery.DataLayer.Repositories;
+using Gallery.Extensions;
 using Gallery.Managers;
 using Gallery.Models;
 
@@ -18,18 +19,28 @@ namespace Gallery.Controllers
     [Route("Gallery/album")]
     public class AlbumController : ApiController
     {
+        public const int MAX_NUMBER_PHOTOS_IN_DISCOVERY = 5;
+
         private readonly AlbumManager _albumManager;
         private readonly AuthenticationManager _authManager;
+        private readonly UserManager _userManager;
+        private readonly PhotoManager _photoManager;
+        private readonly FileManager _fileManager;
 
         public AlbumController() 
-            : this(Startup.Resolver.Resolve<AlbumManager>(), Startup.Resolver.Resolve<AuthenticationManager>())
+            : this(Startup.Resolver.Resolve<AlbumManager>(), Startup.Resolver.Resolve<AuthenticationManager>(),
+                   Startup.Resolver.Resolve<UserManager>(), Startup.Resolver.Resolve<PhotoManager>(),
+                   Startup.Resolver.Resolve<FileManager>())
         {
         }
 
-        public AlbumController(AlbumManager albumManager, AuthenticationManager authManager)
+        public AlbumController(AlbumManager albumManager, AuthenticationManager authManager, UserManager userManager, PhotoManager photoManager, FileManager fileManager)
         {
             _albumManager = albumManager;
             _authManager = authManager;
+            _userManager = userManager;
+            _photoManager = photoManager;
+            _fileManager = fileManager;
         }
 
         [HttpGet]
@@ -41,14 +52,7 @@ namespace Gallery.Controllers
                 return Unauthorized();
             
             var albums = _albumManager.GetUserAlbums(userId).ToList()
-                                      .Select(Mapper.Map<AlbumViewModel>)
-                                      .Select(avm => new DiscoveryAlbumViewModel(avm)
-                                      {
-                                          ProfilePicture = "",
-                                          Action = "Created",
-                                          UserName = "",
-                                          Photos = null//todo
-                                      });
+                                      .Select(Mapper.Map<AlbumViewModel>);
 
             return Ok(albums);
         }
@@ -62,9 +66,40 @@ namespace Gallery.Controllers
             if (userId < 0)
                 return Unauthorized();
 
-            var albums = _albumManager.GetAll().Where(a => a.Privacy == AlbumPrivacy.Public);
+            var user = _userManager.GetById(userId);
 
-            return Ok(albums.Select(Mapper.Map<AlbumViewModel>));
+            if (user == null)
+                return BadRequest();
+            
+            var albums = _albumManager.GetPublicAlbums(userId).ToList()
+                                      .OrderByDescending(a => a.CreatedAt)
+                                      .Select(Mapper.Map<AlbumViewModel>)
+                                      .Select(avm =>
+                                      {
+                                          var photos = _photoManager.GetAlbumPhotos(avm.Id).ToList()
+                                                                    .Where(p => p.HasAccess(user, Operation.Read, avm))
+                                                                    .OrderByDescending(p => p.UploadedAt)
+                                                                    .Select(Mapper.Map<PhotoViewModel>)
+                                                                    .Select(pvm => new DiscoveryPhotoViewModel(pvm)
+                                                                    {
+                                                                        Url = _fileManager.GetById(pvm.FileId)?.ThumbnailPath
+                                                                    })
+                                                                    .ToList();
+
+                                          const int maxItems = MAX_NUMBER_PHOTOS_IN_DISCOVERY;
+
+                                          return new DiscoveryAlbumViewModel(avm)
+                                          {
+                                              ProfilePicture = "http://gallery.code40.local/app/resources/images/fbpic.jpg",
+                                              UserName = _userManager.GetById(avm.CreatedBy)?.FullName,
+                                              PhotoCount = photos.Count,
+                                              Photos = photos.OnItem(maxItems, (pvm, count) => pvm.OtherX = count - maxItems)
+                                                             .Take(MAX_NUMBER_PHOTOS_IN_DISCOVERY)
+                                                             .ToList()
+                                          };
+                                      });
+
+            return Ok(albums);
         }
 
         [HttpGet]
@@ -84,7 +119,27 @@ namespace Gallery.Controllers
             if (!_authManager.HasAccess(userId, album, Operation.Read))
                 return Unauthorized();
 
-            return Ok(Mapper.Map<AlbumViewModel>(album));
+            var user = _userManager.GetById(userId);
+
+            if (user == null)
+                return BadRequest();
+
+            var albumViewModel = Mapper.Map<AlbumViewModel>(album);
+
+            var albumMap = new DiscoveryAlbumViewModel(albumViewModel)
+            {
+                Photos = _photoManager.GetAlbumPhotos(albumViewModel.Id).ToList()
+                                      .Where(p => p.HasAccess(user, Operation.Read, albumViewModel))
+                                      .OrderByDescending(p => p.UploadedAt)
+                                      .Select(Mapper.Map<PhotoViewModel>)
+                                      .Select(pvm => new DiscoveryPhotoViewModel(pvm)
+                                      {
+                                          Url = _fileManager.GetById(pvm.FileId)?.ThumbnailPath
+                                      })
+                                      .ToList()
+            };
+            
+            return Ok(albumMap);
         }
 
         [HttpPost]

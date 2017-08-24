@@ -3,4 +3,41 @@
     Layout = "~/Views/Gallery.cshtml";
 }
 
-<h2>@ViewBag.Title</h2>
+<link rel="stylesheet" type="text/css" href="~/app/css/photosStyle.css"/>
+
+<div ng-controller="photoController">
+    <div class="photoHeader">
+        <div>
+            Pozele tale {{selectedAlbum ? '> ' + selectedAlbum.name : ''}}
+        </div>
+        <div class="photoSearchBox pull-right">
+            <div class="input-group stylish-input-group pull-right">
+                <input type="text" class="form-control" placeholder="Search" ng-model="searchName">
+                <span class="input-group-addon">
+                    <button ng-click="search()">
+                        <span class="glyphicon glyphicon-search"></span>
+                    </button>
+                </span>
+            </div>
+        </div>
+    </div>
+    <div class="photoConainer row">
+        <div class="photos col-md-10 container">
+            <div class="row">
+                
+            </div>
+            <div class="contentPhotos row" ng-show="selectedAlbum">
+
+            </div>
+        </div>
+        <div class="albums col-md-2">
+            <button class="btn btn-success" ng-click="addAlbum()">Add</button>
+            <a ng-repeat="album in albums" ng-show="albums" class="albumItem">
+                <div ng-click="selectAlbum(album)" ng-class="{active: album.selected}">
+                    <h2>{{album.name}}</h2>
+                    <span>{{album.photos.length}} poze</span>
+                </div>
+            </a>
+        </div>
+    </div>
+</div>

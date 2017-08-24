@@ -111,10 +111,10 @@ namespace Gallery.Managers
         {
             try
             {
-                var context = request.GetOwinContext();
+                //var context = request.GetOwinContext();
 
-                if (context.Authentication == null)
-                    return -1;
+                //if (context.Authentication == null)
+                //    return -1;
 
                 //var user = context.Authentication.User;
                 //var claimIdentity = user.FindFirst(ClaimTypes.NameIdentifier);
@@ -132,7 +132,7 @@ namespace Gallery.Managers
 
                 return userId;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 return -1;
             }

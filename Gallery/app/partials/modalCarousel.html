@@ -1,0 +1,43 @@
+﻿<form class="form-horizontal" role="form" name="carouselModal">
+    <div class="modal-header">
+        <button type="button" class="close" ng-click="close()">&times;</button>
+        <h3 class="modal-title">{{album.name}}</h3>
+    </div>
+    <div class="modal-body">
+        <div ng-show="!album.items">
+            Loading...
+        </div>
+        <div ng-show="album.items.length <= 0">
+            Empty album
+        </div>
+
+        <div id="carousel-generic" class="carousel slide" data-ride="carousel" data-interval="false">
+
+            <!-- Wrapper for slides -->
+            <div class="carousel-inner">
+                <div class="item" ng-repeat="item in album.items" ng-class="{active: $index == activeItem}">
+                    <img class="img-responsive" ng-src="{{item.url}}" alt="{{item.name}}">
+                    <div class="carousel-caption">
+                        {{item.name}} {{$index}}
+                    </div>
+                </div>
+            </div>
+            <!-- Controls -->
+            <a class="left carousel-control" href="#carousel-generic" role="button" data-slide="prev" ng-show="album.items && album.items.length > 1">
+                <span class="glyphicon glyphicon-chevron-left"></span>
+            </a>
+            <a class="right carousel-control" href="#carousel-generic" role="button" data-slide="next" ng-show="album.items && album.items.length > 1">
+                <span class="glyphicon glyphicon-chevron-right"></span>
+            </a>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <ol class="carousel-indicators" ng-show="album.items && album.items.length > 0">
+            <li ng-repeat="item in album.items" 
+                class="{{$index == activeItem ? 'active' : ''}}" 
+                data-target="#carousel-generic" 
+                data-slide-to="{{$index}}"></li>
+        </ol>
+        <div style="margin-top: 35px"></div>
+    </div>
+</form>

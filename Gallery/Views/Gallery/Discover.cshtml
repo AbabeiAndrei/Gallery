@@ -3,26 +3,37 @@
     Layout = "~/Views/Gallery.cshtml";
 }
 
+<link type="text/css" rel="stylesheet" href="~/app/css/discoverStyle.css"/>
+
 <div class="container">
+    <div class="col-md-2"></div>
     <div class="row" ng-controller="discoveryController">
-        <div ng-show="!items || items.length === 0" class="text-center">
-            No item to display
-        </div>
-        <div ng-repeat="item in items">
-            <div class="profilePicture pull-left">
-                <img ng-src="{{item.profilePicture}}" alt="User{{item.userName}}"/>
+        <div class="col-md-8">
+            <div ng-show="!items || items.length === 0" class="text-center">
+                No item to display
             </div>
-            <div class="pull-right">
-                <strong>{{item.userName}} </strong>
-                <span>{{item.action}}</span>
-                <strong>{{item.name}}</strong>
-            </div>
-            <div ng-repeat="photo in item.photos" ng-if="item.photos">
-                <a ng-click="showPhoto(photo)">
-                    <img ng-src="{{photo.url}}" alt="img{{$index}}"/>
-                </a>
+            <div ng-repeat="item in items">
+                <div class="profilePicture">
+                    <img ng-src="{{item.profilePicture}}" alt="User{{item.userName}}"/>
+                    <div>
+                        <strong>{{item.userName}} </strong>
+                        <span> a creeat un album cu {{item.photoCount == 1 ? 'o fotografie' : item.photoCount + ' fotografii'}} numit </span>
+                        <strong>{{item.name}}</strong>
+                    </div>
+                </div>
+                <div class="albumPictures">
+                    <div ng-repeat="photo in item.photos" ng-if="item.photos" class="albumPicture">
+                        <a generic-modal="carouselModal" generic-modal-data="photo">
+                            <div>
+                                <img ng-src="{{photo.url}}" alt="img{{$index}}"/>
+                                <div ng-show="photo.otherX" class="countItems">+{{photo.otherX}} photos</div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
+    <div class="col-md-2"></div>
 </div>
 

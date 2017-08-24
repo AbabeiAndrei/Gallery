@@ -7,7 +7,7 @@
                  .then(function(result) {
                     $scope.items = result.data;
                 }, function() {
-                             
+                              
                 });
         }
     ]);

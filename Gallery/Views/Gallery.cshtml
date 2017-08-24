@@ -4,22 +4,35 @@
 <head>
     <meta name="viewport" content="width=device-width" />
     <title>@ViewBag.Title</title>
-    <link href="~/bower_components/bootstrap/dist/css/bootstrap.css" type="text/css" rel="stylesheet" />
-    <script src="~/bower_components/angular/angular.js"></script>
+    <link href="~/bower_components/bootstrap/dist/css/bootstrap.min.css" type="text/css" rel="stylesheet" />
+
+    <script src="~/bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="~/bower_components/angular/angular.min.js"></script>
+    <script src="~/bower_components/angular-ui/build/angular-ui.min.js"></script>
+    <script src="~/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="~/bower_components/angular-bootstrap/ui-bootstrap.min.js"></script>
+    <script src="~/bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
+
     <script src="~/app/app.js"></script>
+    <link type="text/css" rel="stylesheet" href="~/app/css/galleryStyle.css" />
 </head>
 <body ng-app="galleryApp">
     <div class="page-header" ng-controller="galleryController">
         <h1>
             <a href="/" class="btn" style="font: 100 35px arial, sans-serif; margin-left: 25px">Gallery</a>
         </h1>
+        <div class="pull-right user-name">
+            Salut, @ViewBag.UserName
+            <a href="http://gallery.code40.local/gallery/account/logout" class="btn">Deconectare</a>
+        </div>
+
         <div style="margin-left: 25px">
             <a href="http://gallery.code40.local/Gallery/Photos" class="btn" ng-class="{'btn-primary': isOnPhoto}">Albume</a>
             <a href="http://gallery.code40.local/Gallery/Discover" class="btn" ng-class="{'btn-primary': !isOnPhoto}">Descopera</a>
         </div>
     </div>
     <div class="container">
-        <div class="row">
+        <div class="row contentBody">
             @RenderBody()
         </div>
     </div>
