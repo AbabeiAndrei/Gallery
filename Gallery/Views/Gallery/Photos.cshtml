@@ -24,14 +24,18 @@
     <div class="photoConainer row">
         <div class="photos col-md-10 container">
             <div class="row">
-                
+                <button class="btn btn-success" ng-disabled="checkedImages().length <= 0" ng-click="showOptions()">Optiuni</button>
+                <button class="btn btn-success" ng-disabled="!selectedAlbum" ng-click="download()">Descarca</button>
+                <button class="btn btn-success" ng-disabled="!selectedAlbum" ng-click="addPhotos()">Adauga</button>
             </div>
-            <div class="contentPhotos row" ng-show="selectedAlbum">
-
+            <div class="contentPhotos row" ng-show="selectedAlbum && selectedAlbum.photos">
+                <div ng-repeat="photo in selectedAlbum.photos">
+                    
+                </div>
             </div>
         </div>
         <div class="albums col-md-2">
-            <button class="btn btn-success" ng-click="addAlbum()">Add</button>
+            <button class="btn btn-success btn-add-album" ng-click="addAlbum()">Add</button>
             <a ng-repeat="album in albums" ng-show="albums" class="albumItem">
                 <div ng-click="selectAlbum(album)" ng-class="{active: album.selected}">
                     <h2>{{album.name}}</h2>

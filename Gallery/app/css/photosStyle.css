@@ -60,3 +60,8 @@
 .albumItem div span {
     font-size: 18px
 }
+
+.btn-add-album {
+    margin-top: 10px;
+    margin-left: 10px
+}

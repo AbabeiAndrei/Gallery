@@ -26,5 +26,25 @@
                 $scope.selectedAlbum = album;
                 $scope.selectedAlbum.selected = true;
             }
+
+            $scope.checkedImages = function() {
+                return [];
+            }
+
+            $scope.showOptions = function() {
+                alert('showOptions');
+            }
+
+            $scope.download = function () {
+                alert('download');
+            }
+
+            $scope.addPhotos = function () {
+                alert('addPhotos');
+            }
+
+            $scope.addAlbum = function () {
+                alert('addAlbum');
+            }
         }
     ]);
