@@ -50,11 +50,15 @@ namespace Gallery.Controllers
 
             if(userId < 0)
                 return Unauthorized();
-            
-            var albums = _albumManager.GetUserAlbums(userId).ToList()
-                                      .Select(Mapper.Map<AlbumViewModel>);
 
-            return Ok(albums);
+            var user = _userManager.GetById(userId);
+
+            if (user == null)
+                return BadRequest();
+
+            var albums = _albumManager.GetUserAlbums(userId).ToList();
+
+            return Ok(MapAlbumToModel(albums, user));
         }
 
         [HttpGet]
@@ -70,36 +74,41 @@ namespace Gallery.Controllers
 
             if (user == null)
                 return BadRequest();
-            
-            var albums = _albumManager.GetPublicAlbums(userId).ToList()
-                                      .OrderByDescending(a => a.CreatedAt)
-                                      .Select(Mapper.Map<AlbumViewModel>)
-                                      .Select(avm =>
-                                      {
-                                          var photos = _photoManager.GetAlbumPhotos(avm.Id).ToList()
-                                                                    .Where(p => p.HasAccess(user, Operation.Read, avm))
-                                                                    .OrderByDescending(p => p.UploadedAt)
-                                                                    .Select(Mapper.Map<PhotoViewModel>)
-                                                                    .Select(pvm => new DiscoveryPhotoViewModel(pvm)
-                                                                    {
-                                                                        Url = _fileManager.GetById(pvm.FileId)?.ThumbnailPath
-                                                                    })
-                                                                    .ToList();
 
-                                          const int maxItems = MAX_NUMBER_PHOTOS_IN_DISCOVERY;
-
-                                          return new DiscoveryAlbumViewModel(avm)
-                                          {
-                                              ProfilePicture = "http://gallery.code40.local/app/resources/images/fbpic.jpg",
-                                              UserName = _userManager.GetById(avm.CreatedBy)?.FullName,
-                                              PhotoCount = photos.Count,
-                                              Photos = photos.OnItem(maxItems, (pvm, count) => pvm.OtherX = count - maxItems)
-                                                             .Take(MAX_NUMBER_PHOTOS_IN_DISCOVERY)
-                                                             .ToList()
-                                          };
-                                      });
+            var albums = MapAlbumToModel(_albumManager.GetPublicAlbums(userId).ToList(), user);
+                                      
 
             return Ok(albums);
+        }
+
+        private IEnumerable<DiscoveryAlbumViewModel> MapAlbumToModel(IEnumerable<Album> toList, IIdentity identity)
+        {
+            return toList.OrderByDescending(a => a.CreatedAt)
+                         .Select(Mapper.Map<AlbumViewModel>)
+                         .Select(avm =>
+                         {
+                             var photos = _photoManager.GetAlbumPhotos(avm.Id).ToList()
+                                                       .Where(p => p.HasAccess(identity, Operation.Read, avm))
+                                                       .OrderByDescending(p => p.UploadedAt)
+                                                       .Select(Mapper.Map<PhotoViewModel>)
+                                                       .Select(pvm => new DiscoveryPhotoViewModel(pvm)
+                                                       {
+                                                           Url = _fileManager.GetById(pvm.FileId)?.ThumbnailPath
+                                                       })
+                                                       .ToList();
+
+                             const int maxItems = MAX_NUMBER_PHOTOS_IN_DISCOVERY;
+
+                             return new DiscoveryAlbumViewModel(avm)
+                             {
+                                 ProfilePicture = "http://gallery.code40.local/app/resources/images/fbpic.jpg",
+                                 UserName = _userManager.GetById(avm.CreatedBy)?.FullName,
+                                 PhotoCount = photos.Count,
+                                 Photos = photos.OnItem(maxItems, (pvm, count) => pvm.OtherX = count - maxItems)
+                                                .Take(MAX_NUMBER_PHOTOS_IN_DISCOVERY)
+                                                .ToList()
+                             };
+                         });
         }
 
         [HttpGet]

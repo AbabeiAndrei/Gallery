@@ -160,23 +160,18 @@ app.controller('loginController',
 app.controller('photoController',
     [
         '$scope',
-        '$location',
-        function ($scope, $location) {
+        '$http',
+        '$filter',
+        function ($scope, $http, $filter) {
             $scope.searchName = '';
-            $scope.albums = [
-                {
-                    name: 'album 1',
-                    photos:[]
+
+            $http.get('album').then(
+                function(result) {
+                    $scope.albums = result.data;
                 },
-                {
-                    name: 'album 2',
-                    photos: []
-                },
-                {
-                    name: 'album 3',
-                    photos: []
-                }
-            ];
+                function(error) {
+                    console.log(error);
+                });
 
             $scope.selectAlbum = function (album) {
                 if ($scope.selectedAlbum) {
@@ -184,10 +179,36 @@ app.controller('photoController',
                 }
                 $scope.selectedAlbum = album;
                 $scope.selectedAlbum.selected = true;
+
+                $scope.clearSelection();
             }
 
-            $scope.checkedImages = function() {
-                return [];
+            $scope.checkedImages = function () {
+                if (!$scope.selectedAlbum || !$scope.selectedAlbum.photos || $scope.selectedAlbum.photos.length <= 0) {
+                    return [];
+                }
+
+                var items = [];
+
+                for (var i = 0; i < $scope.selectedAlbum.photos.length; i++) {
+                    if ($scope.selectedAlbum.photos[i].checked) {
+                        items.push($scope.selectedAlbum.photos[i]);
+                    }
+                }
+
+                return items;
+            }
+
+            $scope.clearSelection = function() {
+                if (!$scope.selectedAlbum || !$scope.selectedAlbum.photos || $scope.selectedAlbum.photos.length <= 0) {
+                    return;
+                }
+
+                for (var i = 0; i < $scope.selectedAlbum.photos.length; i++) {
+                    if ($scope.selectedAlbum.photos[i].checked) {
+                        $scope.selectedAlbum.photos[i].checked = false;
+                    }
+                }
             }
 
             $scope.showOptions = function() {

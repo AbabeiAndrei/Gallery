@@ -10,7 +10,7 @@
         <div>
             Pozele tale {{selectedAlbum ? '> ' + selectedAlbum.name : ''}}
         </div>
-        <div class="photoSearchBox pull-right">
+        <div class="photoSearchBox pull-right" ng-show="false">
             <div class="input-group stylish-input-group pull-right">
                 <input type="text" class="form-control" placeholder="Search" ng-model="searchName">
                 <span class="input-group-addon">
@@ -25,12 +25,17 @@
         <div class="photos col-md-10 container">
             <div class="row">
                 <button class="btn btn-success" ng-disabled="checkedImages().length <= 0" ng-click="showOptions()">Optiuni</button>
-                <button class="btn btn-success" ng-disabled="!selectedAlbum" ng-click="download()">Descarca</button>
+                <button class="btn btn-success" ng-disabled="!selectedAlbum || !selectedAlbum.photos || selectedAlbum.photos.length <= 0" ng-click="download()">Descarca</button>
                 <button class="btn btn-success" ng-disabled="!selectedAlbum" ng-click="addPhotos()">Adauga</button>
             </div>
             <div class="contentPhotos row" ng-show="selectedAlbum && selectedAlbum.photos">
                 <div ng-repeat="photo in selectedAlbum.photos">
-                    
+                    <a href="#" class="imageItem">
+                        <img ng-src="{{photo.url}}" alt="{{photo.name}}"/>
+                    </a>
+                    <div class="checkbox">
+                        <label><input type="checkbox" class="checkItem" value="" ng-model="photo.checked"/></label>
+                    </div>
                 </div>
             </div>
         </div>

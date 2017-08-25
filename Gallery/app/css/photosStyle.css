@@ -13,6 +13,10 @@
 
 }
 
+.contentPhotos {
+    padding-top: 10px
+}
+
 .photoSearchBox {
     width: 250px;
 }
@@ -64,4 +68,19 @@
 .btn-add-album {
     margin-top: 10px;
     margin-left: 10px
+}
+
+a.imageItem {
+    text-decoration: none
+}
+
+a.imageItem:hover {
+    text-decoration: none
+}
+
+.checkItem {
+    -ms-transform: translate(10px, -300px);
+    -webkit-transform: translate(10px, -300px);
+    transform: translate(10px, -300px);
+    cursor: default
 }
