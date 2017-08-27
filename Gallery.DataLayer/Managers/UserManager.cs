@@ -1,14 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Gallery.DataLayer.Base;
 using Gallery.DataLayer.Entities;
 using Gallery.DataLayer.Entities.Base;
 using ServiceStack.OrmLite;
 
-namespace Gallery.DataLayer.Repositories
+namespace Gallery.DataLayer.Managers
 {
     public class UserManager : IManager<User>
     {
@@ -26,7 +23,7 @@ namespace Gallery.DataLayer.Repositories
             return _context.GetAll<User>(u => u.RowState != RowState.Deleted);
         }
 
-        public User GetById(object id)
+        public User GetById(int id)
         {
             return _context.GetById<User>(id);
         }
@@ -41,7 +38,7 @@ namespace Gallery.DataLayer.Repositories
             _context.Update(item);
         }
 
-        public void Delete(object id)
+        public void Delete(int id)
         {
             _context.Delete<User>(id);
         }

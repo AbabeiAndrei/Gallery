@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using Microsoft.Owin.Host.SystemWeb;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
 using Autofac;
-using Gallery.DataLayer.Repositories;
+using Gallery.DataLayer.Managers;
 using Gallery.Managers;
 
 namespace Gallery.Controllers

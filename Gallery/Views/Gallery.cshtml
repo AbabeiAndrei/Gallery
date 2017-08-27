@@ -1,10 +1,14 @@
-﻿<!DOCTYPE html>
+﻿@{
+    ViewBag.BaseAddress = Startup.SITE_LOCATION;
+}
+<!DOCTYPE html>
 
 <html>
 <head>
     <meta name="viewport" content="width=device-width" />
     <title>@ViewBag.Title</title>
     <link href="~/bower_components/bootstrap/dist/css/bootstrap.min.css" type="text/css" rel="stylesheet" />
+    <link href="~/bower_components/font-awesome/css/font-awesome.min.css" type="text/css" rel="stylesheet"/>
 
     <script src="~/bower_components/jquery/dist/jquery.min.js"></script>
     <script src="~/bower_components/angular/angular.min.js"></script>
@@ -23,12 +27,12 @@
         </h1>
         <div class="pull-right user-name">
             Salut, @ViewBag.UserName
-            <a href="http://gallery.code40.local/gallery/account/logout" class="btn">Deconectare</a>
+            <a href=@(ViewBag.BaseAddress + "Gallery/Account/Logout") class="btn">Deconectare</a>
         </div>
 
         <div style="margin-left: 25px">
-            <a href="http://gallery.code40.local/Gallery/Photos" class="btn" ng-class="{'btn-primary': isOnPhoto}">Albume</a>
-            <a href="http://gallery.code40.local/Gallery/Discover" class="btn" ng-class="{'btn-primary': !isOnPhoto}">Descopera</a>
+            <a href=@(ViewBag.BaseAddress + "Gallery/Photos") class="btn" ng-class="{'btn-primary': isOnPhoto}">Albume</a>
+            <a href=@(ViewBag.BaseAddress + "Gallery/Discover") class="btn" ng-class="{'btn-primary': !isOnPhoto}">Descopera</a>
         </div>
     </div>
     <div class="container">

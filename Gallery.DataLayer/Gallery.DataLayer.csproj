@@ -112,6 +112,7 @@
     <Compile Include="Entities\Album.cs" />
     <Compile Include="Entities\Base\Entity.cs" />
     <Compile Include="Entities\Base\IEntity.cs" />
+    <Compile Include="Entities\Base\IdentificableEntity.cs" />
     <Compile Include="Entities\Base\IIdentity.cs" />
     <Compile Include="Entities\File.cs" />
     <Compile Include="Entities\Photo.cs" />
@@ -127,7 +128,6 @@
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
     <Compile Include="Startup\DatabaseUpdater.cs" />
-    <Compile Include="Startup\DependencyConfig.cs" />
     <Compile Include="Utils\UserPasswordHasher.cs" />
   </ItemGroup>
   <ItemGroup />

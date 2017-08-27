@@ -9,7 +9,6 @@ using AutoMapper;
 using Gallery.DataLayer.Entities;
 using Gallery.DataLayer.Entities.Base;
 using Gallery.DataLayer.Managers;
-using Gallery.DataLayer.Repositories;
 using Gallery.Extensions;
 using Gallery.Managers;
 using Gallery.Models;
@@ -152,7 +151,7 @@ namespace Gallery.Controllers
         }
 
         [HttpPost]
-        public IHttpActionResult Create([FromBody]AlbumModel model)
+        public IHttpActionResult Create([FromBody]AlbumPostModel model)
         {
             var userId = Request.GetUserId();
 
@@ -172,6 +171,18 @@ namespace Gallery.Controllers
             album.CreatedAt = DateTime.Now;
 
             _albumManager.Add(album);
+
+            foreach (var photoModel in model.Photos)
+            {
+                var photo = Mapper.Map<Photo>(photoModel);
+
+                photo.AlbumId = album.Id;
+                photo.RowState = RowState.Created;
+                photo.UploadedAt = DateTime.Now;
+                photo.UploadedBy = userId;
+
+                _photoManager.Add(photo);
+            }
 
             return Created($"/{album.Id}", Mapper.Map<AlbumViewModel>(album));
         }
@@ -208,6 +219,7 @@ namespace Gallery.Controllers
         }
         
         [HttpDelete]
+        [Route("Gallery/album/{id}")]
         public IHttpActionResult Delete(int id)
         {
             var userId = Request.GetUserId();
@@ -223,7 +235,7 @@ namespace Gallery.Controllers
             if (!_authManager.HasAccess(userId, album, Operation.Delete))
                 return Unauthorized();
 
-            _albumManager.Delete(album);
+            _albumManager.Delete(album.Id);
 
             return Ok();
         }

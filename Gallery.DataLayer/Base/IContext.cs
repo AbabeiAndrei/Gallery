@@ -7,6 +7,8 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using Gallery.DataLayer.Entities;
+using Gallery.DataLayer.Entities.Base;
+using ServiceStack.Model;
 
 namespace Gallery.DataLayer.Base
 {
@@ -17,9 +19,9 @@ namespace Gallery.DataLayer.Base
         [Pure]
         IEnumerable<T> GetAll<T>(Expression<Func<T, bool>> filter = null);
         [Pure]
-        T GetById<T>(object id);
-        void Add<T>(T item);
+        T GetById<T>(int id) where T : IdentificableEntity;
+        void Add<T>(T item) where T : IdentificableEntity;
         void Update<T>(T item);
-        void Delete<T>(object id);
+        void Delete<T>(int id) where T : IdentificableEntity;
     }
 }

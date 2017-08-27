@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ServiceStack.DataAnnotations;
+﻿using ServiceStack.DataAnnotations;
 
 namespace Gallery.DataLayer.Entities.Base
 {
@@ -14,6 +9,7 @@ namespace Gallery.DataLayer.Entities.Base
         Deleted = 1
     }
 
+    [EnumAsInt]
     public enum Operation : short
     {
         Read,

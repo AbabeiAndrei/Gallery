@@ -1,0 +1,40 @@
+﻿<form class="form-horizontal" role="form" name="optionsPhotos">
+    <div class="modal-header">
+        <button type="button" class="close" ng-click="dismiss()">&times;</button>
+        <h3 class="modal-title">Optiuni fotografii</h3>
+    </div>
+    <div class="modal-body">
+        <div class="row" style="padding: 0 20px">
+            <label>Album</label>
+            <div class="dropdown">
+                <button class="btn btn-default dropdown-toggle" type="button" id="ddalbum" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                    {{selectedAlbum.name}} <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="ddalbum">
+                    <li ng-repeat="album in albums">
+                        <a href="#" ng-click="selectAlbum(album)">{{album.name}}</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="radio">
+                <label class="active"><input type="radio" checked ng-model="selectedPrivacy" value="public" name="photosPrivacy">Public</label>
+            </div>
+            <div class="radio">
+                <label><input type="radio" ng-model="selectedPrivacy" value="album" name="photosPrivacy">Album</label>
+            </div>
+            <div class="radio">
+                <label><input type="radio" ng-model="selectedPrivacy" value="private" name="photosPrivacy">Privat</label>
+            </div>
+        </div>
+        <div class="row" ng-show="errorSave">
+            <span class="alert alert-danger pull-left" role="alert">
+                {{errorSave}}
+            </span>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-danger pull-left" ng-click="delete()" ng-disabled="inSaving">Sterge</button>
+        <i class="fa fa-refresh fa-spin pull-left" ng-show="inSaving"></i>
+        <button class="btn btn-primary pull-right" ng-click="save()" ng-disabled="inSaving">Salveaza</button>
+    </div>
+</form>

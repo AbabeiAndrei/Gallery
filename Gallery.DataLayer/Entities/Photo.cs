@@ -1,16 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics.Contracts;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Gallery.DataLayer.Entities.Base;
 using ServiceStack.DataAnnotations;
-using ServiceStack.Model;
 using ServiceStack.OrmLite;
 
 namespace Gallery.DataLayer.Entities
 {
+    [EnumAsInt]
     public enum PhotoPrivacy : short
     {
         Public = 0,
@@ -19,11 +15,11 @@ namespace Gallery.DataLayer.Entities
     }
 
     [Alias("photos")]
-    public class Photo : Entity, IHasId<int>
+    public class Photo : Entity
     {
         [Alias("id")]
         [AutoIncrement]
-        public int Id { get; set; }
+        public override int Id { get; set; }
 
         [Required]
         [Alias("name")]

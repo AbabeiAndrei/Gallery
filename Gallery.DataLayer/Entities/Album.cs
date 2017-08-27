@@ -11,6 +11,7 @@ using ServiceStack.OrmLite;
 
 namespace Gallery.DataLayer.Entities
 {
+    [EnumAsInt]
     public enum AlbumPrivacy : short
     {
         Public = 0,
@@ -18,11 +19,11 @@ namespace Gallery.DataLayer.Entities
     }
 
     [Alias("albums")]
-    public class Album : Entity, IHasId<int>
+    public class Album : Entity
     {
         [Alias("id")]
         [AutoIncrement]
-        public int Id { get; set; }
+        public override int Id { get; set; }
 
         [Required]
         [Alias("name")]

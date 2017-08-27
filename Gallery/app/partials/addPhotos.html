@@ -1,0 +1,91 @@
+﻿<link type="text/css" rel="stylesheet" href="../app/css/addPhotos.css" />
+<form class="form-horizontal" role="form" name="addPhotos">
+    <div class="modal-header">
+        <button type="button" class="close" ng-click="dismiss()">&times;</button>
+        <h3 class="modal-title">Adauga fotografii</h3>
+    </div>
+    <div class="modal-body">
+        <div class="row album-location">
+            <label>Album</label>
+            <div class="dropdown">
+                <button class="btn btn-default dropdown-toggle" type="button" id="ddalbum" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                    {{selectedAlbum.name}} <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="ddalbum">
+                    <li ng-repeat="album in albums">
+                        <a href="#" ng-click="selectAlbum(album)">{{album.name}}</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="list-photos row">
+            <div ng-repeat="photo in photos">
+                <a href="#" ng-click="selectPhoto(photo)">
+                    <img ng-src="{{photo.thumbnailPath}}" alt="{{photo.name}}" class="photo-item" ng-class="{active: photo.selected}" />
+                </a>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-md-6">
+                <div ng-show="selectedPhoto">
+                    <div class="form-group row">
+                        <div class="col-md-4">
+                            <label>Nume fotografie</label>
+                        </div>
+                        <div class="col-md-8">
+                            <input type="text" class="form-control" ng-model="selectedPhoto.name" />
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-md-4">
+                            <label>Data</label>
+                        </div>
+                        <div class="col-md-8">
+                            <input type="date" class="form-control" ng-model="selectedPhoto.date" />
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-md-8">
+                            <div class="radio">
+                                <label><input type="radio" ng-model="selectedPhoto.privacy" value="public" name="photoPrivacy">Public</label>
+                            </div>
+                            <div class="radio ">
+                                <label class="active"><input type="radio" ng-model="selectedPhoto.privacy" value="album" name="photoPrivacy">Album</label>
+                            </div>
+                            <div class="radio">
+                                <label><input type="radio" checked ng-model="selectedPhoto.privacy" value="private" name="photoPrivacy">Privat</label>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <button class="btn btn-danger" ng-click="removePhoto(selectedPhoto)" ng-disabled="!selectedPhoto">Sterge</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="upload-container" id="drop-zone">
+                    <p>Drop here to add more photos</p>
+                    <label class="btn btn-success btn-file">
+                        or Browse <input type="file" style="display: none;" ng-model="fileUpload" file-reader>
+                    </label>
+                    <div class="statusUpload">
+                        <span class="alert alert-danger" role="alert" ng-show="errorUpload">
+                            {{errorUpload}}
+                        </span>
+                        <i class="fa fa-refresh fa-spin" ng-show="inUpload"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row" ng-show="errorSave">
+            <span class="alert alert-danger pull-left" role="alert">
+                {{errorSave}}
+            </span>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <i class="fa fa-refresh fa-spin pull-left" ng-show="inSaving"></i>
+        <label class="pull-left" ng-show="photos && photos.length > 0">{{photos.length}} photo uploaded</label>
+        <button class="btn btn-primary pull-right" ng-click="upload()" ng-disabled="!photos || photos.length <= 0 || inSaving">Adauga</button>
+    </div>
+</form>

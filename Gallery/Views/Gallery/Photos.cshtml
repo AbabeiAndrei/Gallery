@@ -24,13 +24,30 @@
     <div class="photoConainer row">
         <div class="photos col-md-10 container">
             <div class="row">
-                <button class="btn btn-success" ng-disabled="checkedImages().length <= 0" ng-click="showOptions()">Optiuni</button>
-                <button class="btn btn-success" ng-disabled="!selectedAlbum || !selectedAlbum.photos || selectedAlbum.photos.length <= 0" ng-click="download()">Descarca</button>
-                <button class="btn btn-success" ng-disabled="!selectedAlbum" ng-click="addPhotos()">Adauga</button>
+                <button class="btn btn-success" 
+                        ng-disabled="checkedImages().length <= 0" 
+                        generic-modal="optionsPhotos"
+                        generic-modal-data="generateOptionsPhoto()"
+                        generic-modal-success="refresh()">
+                    Optiuni fotografii
+                </button>
+                <button class="btn btn-success" ng-disabled="!selectedAlbum || !selectedAlbum.photos || selectedAlbum.photos.length <= 0"
+                        ng-click="download()">
+                    {{checkedImages().length === 0 ? 'Descarca toate fotografile' : 'Descarca fotografiile selectate' }}
+                </button>
+                <button class="btn btn-success" ng-disabled="!selectedAlbum"
+                        generic-modal="addPhotos"
+                        generic-modal-data="generateUploadPhoto()"
+                        generic-modal-success="refresh()">
+                    Incarca fotografii
+                </button>
+            </div>
+            <div class="row" ng-show="selectedAlbum && (!selectedAlbum.photos || selectedAlbum.photos.length <= 0)" style="padding-top: 15px">
+                Nu ai nicio poza in acest album
             </div>
             <div class="contentPhotos row" ng-show="selectedAlbum && selectedAlbum.photos">
-                <div ng-repeat="photo in selectedAlbum.photos">
-                    <a href="#" class="imageItem">
+                <div ng-repeat="photo in selectedAlbum.photos" class="imageItem">
+                    <a href="#" generic-modal="carouselModal" generic-modal-data="photo">
                         <img ng-src="{{photo.url}}" alt="{{photo.name}}"/>
                     </a>
                     <div class="checkbox">
@@ -40,13 +57,30 @@
             </div>
         </div>
         <div class="albums col-md-2">
-            <button class="btn btn-success btn-add-album" ng-click="addAlbum()">Add</button>
-            <a ng-repeat="album in albums" ng-show="albums" class="albumItem">
+            <button class="btn btn-success btn-add-album" generic-modal="addAlbum" generic-modal-success="refresh()">Adauga album nou</button>
+            <div ng-show="!albums || albums.length <= 0" style="padding-top: 15px">
+                Nu ai niciun album
+            </div>
+            <div ng-repeat="album in albums" ng-show="albums" class="albumItem">
                 <div ng-click="selectAlbum(album)" ng-class="{active: album.selected}">
                     <h2>{{album.name}}</h2>
                     <span>{{album.photos.length}} poze</span>
+                    <div class="btn-group pull-right options">
+                        <button type="button" class="btn btn-link dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <span class="glyphicon glyphicon-option-horizontal " aria-hidden="true"></span>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="#" generic-modal="editAlbum" generic-modal-data="album" generic-modal-success="refresh();selectAlbum(album);">Modifica</a>
+                            </li>
+                            <li role="separator" class="divider"></li>
+                            <li>
+                                <a href="#" class="delete" ng-click="deleteAlbum(album)">Sterge</a>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
-            </a>
+            </div>
         </div>
     </div>
 </div>

@@ -26,7 +26,7 @@ app.controller('loginController',
                     rememberMe: $scope.rememberMe
                 })
                 .then(function () {
-                    window.location = '/';
+                    window.location = '/Gallery/Photos';
                 },
                     function (response) {
                         if (response.status === 400)    //badRequest

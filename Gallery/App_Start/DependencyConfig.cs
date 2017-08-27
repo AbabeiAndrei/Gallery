@@ -1,7 +1,5 @@
 ﻿using System.Reflection;
 using System.Web.Http;
-using System.Web.Mvc;
-using System.Web.Routing;
 using Autofac;
 using Autofac.Integration.Mvc;
 using Autofac.Integration.WebApi;
@@ -9,13 +7,10 @@ using Gallery.DataLayer;
 using Gallery.DataLayer.Base;
 using Gallery.DataLayer.Entities;
 using Gallery.DataLayer.Managers;
-using Gallery.DataLayer.Properties;
-using Gallery.DataLayer.Repositories;
 using Gallery.DataLayer.Startup;
 using Gallery.DataLayer.Utils;
 using Gallery.Managers;
 using Gallery.Properties;
-using Microsoft.Owin.Security.DataProtection;
 using Owin;
 
 namespace Gallery

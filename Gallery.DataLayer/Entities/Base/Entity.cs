@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Gallery.DataLayer.Entities.Base
 {
-    public abstract class Entity : IEntity
+    public abstract class Entity : IdentificableEntity, IEntity
     {
         public abstract RowState RowState { get; set; }
 

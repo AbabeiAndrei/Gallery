@@ -149,6 +149,8 @@
       <HintPath>..\packages\SgmlReader.1.8.11\lib\4.0\SgmlReaderDll.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="System.IO.Compression" />
+    <Reference Include="System.IO.Compression.FileSystem" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
@@ -209,18 +211,29 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="app\app.js" />
-    <Content Include="app\controllers\carouselModal.js" />
+    <Content Include="app\controllers\modals\addAlbum.js" />
+    <Content Include="app\controllers\modals\addPhotos.js" />
+    <Content Include="app\controllers\modals\carouselModal.js" />
     <Content Include="app\controllers\discoveryController.js" />
+    <Content Include="app\controllers\modals\editAlbum.js" />
     <Content Include="app\controllers\galleryController.js" />
     <Content Include="app\controllers\loginController.js" />
+    <Content Include="app\controllers\modals\optionsPhotos.js" />
     <Content Include="app\controllers\photoController.js" />
     <Content Include="app\controllers\registerController.js" />
+    <Content Include="app\css\addAlbum.css" />
+    <Content Include="app\css\addPhotos.css" />
     <Content Include="app\css\discoverStyle.css" />
     <Content Include="app\css\galleryStyle.css" />
     <Content Include="app\css\photosStyle.css" />
+    <Content Include="app\directives\fileReader.js" />
     <Content Include="app\directives\genericModal.js" />
     <Content Include="app\init.js" />
+    <Content Include="app\partials\addAlbum.html" />
+    <Content Include="app\partials\addPhotos.html" />
+    <Content Include="app\partials\editAlbum.html" />
     <Content Include="app\partials\modalCarousel.html" />
+    <Content Include="app\partials\optionsPhotos.html" />
     <Content Include="app\resources\images\dummy.png" />
     <Content Include="app\resources\images\fbpic.jpg" />
     <Content Include="bower_components\angular-bootstrap\index.js" />
@@ -335,6 +348,11 @@
     <Content Include="bower_components\bootstrap\js\tooltip.js" />
     <Content Include="bower_components\bootstrap\js\transition.js" />
     <Content Include="bower_components\bootstrap\package.js" />
+    <Content Include="bower_components\font-awesome\.gitignore" />
+    <Content Include="bower_components\font-awesome\css\font-awesome.css" />
+    <Content Include="bower_components\font-awesome\css\font-awesome.min.css" />
+    <Content Include="bower_components\font-awesome\fonts\fontawesome-webfont.svg" />
+    <Content Include="bower_components\font-awesome\HELP-US-OUT.txt" />
     <Content Include="bower_components\jquery\AUTHORS.txt" />
     <Content Include="bower_components\jquery\dist\core.js" />
     <Content Include="bower_components\jquery\dist\jquery.js" />
@@ -662,9 +680,13 @@
     <Compile Include="Extensions\GenericEx.cs" />
     <Compile Include="Extensions\LinqEx.cs" />
     <Compile Include="Managers\AutofacDependencyResolver.cs" />
+    <Compile Include="Models\AlbumPostModel.cs" />
     <Compile Include="Models\DiscoveryAlbumViewModel.cs" />
     <Compile Include="Models\DiscoveryPhotoViewModel.cs" />
+    <Compile Include="Models\DownloadViewModel.cs" />
     <Compile Include="Models\FileViewModel.cs" />
+    <Compile Include="Models\MultiplePhotoSaveViewModel.cs" />
+    <Compile Include="Models\MultiplePhotoUploadViewModel.cs" />
     <Compile Include="Models\PhotoModel.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -676,6 +698,7 @@
     <Compile Include="Models\LoginModel.cs" />
     <Compile Include="Models\PhotoViewModel.cs" />
     <Compile Include="Models\RegisterModel.cs" />
+    <Compile Include="Models\ResultFileUploadModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -880,6 +903,43 @@
     <Content Include="bower_components\ui-bootstrap\src\timepicker\docs\readme.md" />
     <Content Include="bower_components\ui-bootstrap\src\tooltip\docs\readme.md" />
     <Content Include="bower_components\ui-bootstrap\src\typeahead\docs\readme.md" />
+    <Content Include="bower_components\font-awesome\.bower.json" />
+    <Content Include="bower_components\font-awesome\.npmignore" />
+    <Content Include="bower_components\font-awesome\bower.json" />
+    <Content Include="bower_components\font-awesome\css\font-awesome.css.map" />
+    <Content Include="bower_components\font-awesome\fonts\fontawesome-webfont.eot" />
+    <Content Include="bower_components\font-awesome\fonts\fontawesome-webfont.ttf" />
+    <Content Include="bower_components\font-awesome\fonts\fontawesome-webfont.woff" />
+    <Content Include="bower_components\font-awesome\fonts\fontawesome-webfont.woff2" />
+    <Content Include="bower_components\font-awesome\fonts\FontAwesome.otf" />
+    <Content Include="bower_components\font-awesome\less\animated.less" />
+    <Content Include="bower_components\font-awesome\less\bordered-pulled.less" />
+    <Content Include="bower_components\font-awesome\less\core.less" />
+    <Content Include="bower_components\font-awesome\less\fixed-width.less" />
+    <Content Include="bower_components\font-awesome\less\font-awesome.less" />
+    <Content Include="bower_components\font-awesome\less\icons.less" />
+    <Content Include="bower_components\font-awesome\less\larger.less" />
+    <Content Include="bower_components\font-awesome\less\list.less" />
+    <Content Include="bower_components\font-awesome\less\mixins.less" />
+    <Content Include="bower_components\font-awesome\less\path.less" />
+    <Content Include="bower_components\font-awesome\less\rotated-flipped.less" />
+    <Content Include="bower_components\font-awesome\less\screen-reader.less" />
+    <Content Include="bower_components\font-awesome\less\stacked.less" />
+    <Content Include="bower_components\font-awesome\less\variables.less" />
+    <Content Include="bower_components\font-awesome\scss\font-awesome.scss" />
+    <Content Include="bower_components\font-awesome\scss\_animated.scss" />
+    <Content Include="bower_components\font-awesome\scss\_bordered-pulled.scss" />
+    <Content Include="bower_components\font-awesome\scss\_core.scss" />
+    <Content Include="bower_components\font-awesome\scss\_fixed-width.scss" />
+    <Content Include="bower_components\font-awesome\scss\_icons.scss" />
+    <Content Include="bower_components\font-awesome\scss\_larger.scss" />
+    <Content Include="bower_components\font-awesome\scss\_list.scss" />
+    <Content Include="bower_components\font-awesome\scss\_mixins.scss" />
+    <Content Include="bower_components\font-awesome\scss\_path.scss" />
+    <Content Include="bower_components\font-awesome\scss\_rotated-flipped.scss" />
+    <Content Include="bower_components\font-awesome\scss\_screen-reader.scss" />
+    <Content Include="bower_components\font-awesome\scss\_stacked.scss" />
+    <Content Include="bower_components\font-awesome\scss\_variables.scss" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -894,7 +954,9 @@
   <ItemGroup>
     <Folder Include="app\filters\" />
     <Folder Include="app\libs\" />
+    <Folder Include="app\resources\photos\" />
     <Folder Include="app\services\" />
+    <Folder Include="app\upload\" />
     <Folder Include="App_Data\" />
   </ItemGroup>
   <ItemGroup>
@@ -918,7 +980,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>42855</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://gallery.code40.local</IISUrl>
+          <IISUrl>http://gallery.andrei.local</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

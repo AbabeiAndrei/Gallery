@@ -1,0 +1,27 @@
+﻿<form class="form-horizontal" role="form" name="editAlbum">
+    <div class="modal-header">
+        <button type="button" class="close" ng-click="dismiss()">&times;</button>
+        <h3 class="modal-title">Modificare album {{albumName}}</h3>
+    </div>
+    <div class="modal-body">
+        <div class="row" style="padding: 0 20px">
+            <label>Nume album</label>
+            <input class="form-control" type="text" ng-model="album.name" />
+            <div class="radio">
+                <label class="active"><input type="radio" checked ng-model="album.privacy" value="public" name="albumPrivacy">Public</label>
+            </div>
+            <div class="radio">
+                <label><input type="radio" ng-model="album.privacy" value="private" name="albumPrivacy">Privat</label>
+            </div>
+        </div>
+        <div class="row" ng-show="errorSave">
+            <span class="alert alert-danger pull-left" role="alert">
+                {{errorSave}}
+            </span>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <i class="fa fa-refresh fa-spin pull-left" ng-show="inSaving"></i>
+        <button class="btn btn-primary pull-right" ng-click="save()" ng-disabled="album.name.trim().length <= 0 || inSaving">Salveaza</button>
+    </div>
+</form>

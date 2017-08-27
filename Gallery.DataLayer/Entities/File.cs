@@ -12,11 +12,11 @@ using ServiceStack.OrmLite;
 namespace Gallery.DataLayer.Entities
 {
     [Alias("files")]
-    public class File : Entity, IHasId<int>
+    public class File : Entity
     {
         [Alias("id")]
         [AutoIncrement]
-        public int Id { get; set; }
+        public override int Id { get; set; }
 
         [Required]
         [Alias("file_path")]
@@ -31,6 +31,11 @@ namespace Gallery.DataLayer.Entities
         [Alias("extension")]
         [StringLength(64)]
         public string Extension { get; set; }
+
+        [Required]
+        [Alias("name")]
+        [StringLength(255)]
+        public string Name { get; set; }
 
         [Required]
         [Alias("uploaded_by")]

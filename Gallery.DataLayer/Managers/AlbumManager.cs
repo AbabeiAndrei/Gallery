@@ -26,7 +26,7 @@ namespace Gallery.DataLayer.Managers
         }
 
         [Pure]
-        public Album GetById(object id)
+        public Album GetById(int id)
         {
             return _context.GetById<Album>(id);
         }
@@ -41,7 +41,7 @@ namespace Gallery.DataLayer.Managers
             _context.Update(item);
         }
 
-        public void Delete(object id)
+        public void Delete(int id)
         {
             _context.Delete<Album>(id);
         }

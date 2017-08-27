@@ -16,6 +16,8 @@ namespace Gallery
 {
     public class Startup
     {
+        public const string SITE_LOCATION = "http://gallery.andrei.local/";
+
         public static IContainer Resolver { get; private set; }
 
         public void Configuration(IAppBuilder app)

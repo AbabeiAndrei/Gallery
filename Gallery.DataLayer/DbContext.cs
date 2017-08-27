@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 using Gallery.DataLayer.Base;
 using Gallery.DataLayer.Entities.Base;
 using ServiceStack.OrmLite;
@@ -30,7 +27,7 @@ namespace Gallery.DataLayer
             }
         }
 
-        public T GetById<T>(object id)
+        public T GetById<T>(int id) where T : IdentificableEntity
         {
             using (var connection = Connection)
             {
@@ -38,11 +35,12 @@ namespace Gallery.DataLayer
             }
         }
 
-        public void Add<T>(T item)
+        public void Add<T>(T item) where T : IdentificableEntity
         {
             using (var connection = Connection)
             {
-                connection.Insert(item);
+                var id = connection.Insert(item, true);
+                item.Id = (int) id;
             }
         }
 
@@ -54,7 +52,7 @@ namespace Gallery.DataLayer
             }
         }
 
-        public void Delete<T>(object id)
+        public void Delete<T>(int id) where T : IdentificableEntity
         {
             using (var connection = Connection)
             {

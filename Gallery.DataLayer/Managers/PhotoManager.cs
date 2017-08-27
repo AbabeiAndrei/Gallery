@@ -23,7 +23,12 @@ namespace Gallery.DataLayer.Managers
             return _context.GetAll<Photo>(p => p.RowState != RowState.Deleted);
         }
 
-        public Photo GetById(object id)
+        public IEnumerable<Photo> GetAll(IEnumerable<int> fromId)
+        {
+            return _context.GetAll<Photo>(p => fromId.Contains(p.Id));
+        }
+
+        public Photo GetById(int id)
         {
             return _context.GetById<Photo>(id);
         }
@@ -38,7 +43,7 @@ namespace Gallery.DataLayer.Managers
             _context.Update(item);
         }
 
-        public void Delete(object id)
+        public void Delete(int id)
         {
             _context.Delete<Photo>(id);
         }

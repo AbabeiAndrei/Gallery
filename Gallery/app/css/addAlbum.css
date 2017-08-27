@@ -1,0 +1,34 @@
+﻿.list-photos {
+    width: 100%;
+    height: 140px;
+    padding: 10px;   
+    display: flex;
+    overflow-x: auto;
+    overflow-y: hidden;
+    margin-bottom: 20px
+}
+
+.photo-item {
+    width: 100px;
+    height: 100px;
+    margin: 2px;
+}
+
+.photo-item.active {
+    border: solid black 1px    
+}
+
+.upload-container {
+    border: dashed gray 2px;
+    padding: 30px;
+    height: 150px;
+    text-align: center;
+}
+
+.upload-container.active {
+    border-color: black;
+}
+
+.upload-container label input {
+    display: none
+}

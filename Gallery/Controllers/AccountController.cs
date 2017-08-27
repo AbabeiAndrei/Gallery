@@ -14,7 +14,7 @@ using Gallery.DataLayer;
 using Gallery.DataLayer.Base;
 using Gallery.DataLayer.Entities;
 using Gallery.DataLayer.Entities.Base;
-using Gallery.DataLayer.Repositories;
+using Gallery.DataLayer.Managers;
 using Gallery.Managers;
 using Gallery.Models;
 using Microsoft.Owin.Security;

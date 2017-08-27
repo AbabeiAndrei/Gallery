@@ -71,6 +71,15 @@ namespace Gallery.Managers
 
             return resource.HasAccess(user, operation, data);
         }
+
+        public bool HasAccess<T>(int userId, int resourceId, Operation operation, object data = null) where T : IdentificableEntity, IEntity
+        {
+            var user = _context.GetById<User>(userId);
+
+            var resource = _context.GetById<T>(resourceId);
+
+            return resource.HasAccess(user, operation, data);
+        }
     }
 
     public static class AuthenitcationManagerEx

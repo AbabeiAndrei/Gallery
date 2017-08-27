@@ -7,6 +7,7 @@ using System.Net;
 using System.Net.Http;
 using System.Web;
 using System.Web.Http;
+using Autofac;
 using AutoMapper;
 using Gallery.DataLayer.Entities;
 using Gallery.DataLayer.Entities.Base;
@@ -17,7 +18,7 @@ using File = Gallery.DataLayer.Entities.File;
 
 namespace Gallery.Controllers
 {
-    [Route("api/file")]
+    [Route("Gallery/file")]
     public class FileController : ApiController
     {
         public const string FILE_LOCATION = "D:\\Gallery";
@@ -27,6 +28,11 @@ namespace Gallery.Controllers
         public static Size ThumbnailSize { get; }
 
         private readonly FileManager _fileManager;
+
+        public FileController()
+            : this(Startup.Resolver.Resolve<FileManager>())
+        {
+        }
 
         public FileController(FileManager fileManager)
         {
@@ -39,7 +45,7 @@ namespace Gallery.Controllers
         }
 
         [HttpGet]
-        [Route("api/file/{id}")]
+        [Route("Gallery/file/{id}")]
         public IHttpActionResult Get(int id)
         {
             var userId = Request.GetUserId();
@@ -52,6 +58,140 @@ namespace Gallery.Controllers
             if (file == null)
                 return NotFound();
             
+            return Ok(Mapper.Map<FileViewModel>(file));
+        }
+
+        [HttpPost]
+        [Route("Gallery/file/fromResult")]
+        public IHttpActionResult CreateFromResult([FromBody] ResultFileUploadModel model)
+        {
+            var userId = Request.GetUserId();
+
+            if (userId < 0)
+                return Unauthorized();
+
+            if (model == null)
+                return BadRequest("file is null");
+
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var fileName = $"{Guid.NewGuid():N}.{model.Extension}";
+
+            var directory = Path.Combine(HttpRuntime.AppDomainAppPath, FileManager.RELATIVE_PATH);
+            var directoryThumbnail = Path.Combine(HttpRuntime.AppDomainAppPath, FileManager.RELATIVE_PATH_THUMBNAIL);
+
+            if(!Directory.Exists(directory))
+                Directory.CreateDirectory(directory);
+
+            if (!Directory.Exists(directoryThumbnail))
+                Directory.CreateDirectory(directoryThumbnail);
+
+
+            var filePath = Path.Combine(directory, fileName);
+
+            var filePathThumbnail = Path.Combine(directoryThumbnail, fileName);
+
+            System.IO.File.WriteAllText(filePath, model.FileContent);
+
+            //var image = Image.FromFile(filePath);
+
+            //var thumbnail = (Image)new Bitmap(image, new Size(200, 200));
+
+            //thumbnail.Save(filePathThumbnail);
+
+            var urlPath = GetUrlPath(FileManager.RELATIVE_PATH, fileName);
+            var urlPathThumbnail = GetUrlPath(FileManager.RELATIVE_PATH_THUMBNAIL, fileName);
+
+            var fileInfo = new FileInfo(filePath);
+
+            var file = new File
+                       {
+                           Extension = model.Extension,
+                           FilePath = urlPath,
+                           ThumbnailPath = urlPathThumbnail,
+                           Size = (int) (fileInfo.Length / 1024),
+                           RowState = RowState.Created,
+                           UploadedAt = DateTime.Now,
+                           UploadedBy = userId
+                       };
+
+            _fileManager.Add(file);
+
+            return Ok(Mapper.Map<FileViewModel>(file));
+        }
+
+
+        [HttpPost]
+        [Route("Gallery/file/fromBase64")]
+        public IHttpActionResult CreateFromBase64([FromBody] ResultFileUploadModel model)
+        {
+            var userId = Request.GetUserId();
+
+            if (userId < 0)
+                return Unauthorized();
+
+            if (model == null)
+                return BadRequest("file is null");
+
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var strSplit = model.FileContent.Split(new[] { "base64," }, StringSplitOptions.None);
+
+            if (strSplit.Length != 2)
+                return BadRequest("invalid base64");
+
+            var base64Str = strSplit[1];
+
+            var fileName = $"{Guid.NewGuid():N}.{model.Extension}";
+
+            var directory = Path.Combine(HttpRuntime.AppDomainAppPath, FileManager.RELATIVE_PATH);
+            var directoryThumbnail = Path.Combine(HttpRuntime.AppDomainAppPath, FileManager.RELATIVE_PATH_THUMBNAIL);
+
+            if (!Directory.Exists(directory))
+                Directory.CreateDirectory(directory);
+
+            if (!Directory.Exists(directoryThumbnail))
+                Directory.CreateDirectory(directoryThumbnail);
+
+
+            var filePath = Path.Combine(directory, fileName);
+
+            var filePathThumbnail = Path.Combine(directoryThumbnail, fileName);
+
+            var bytes = Convert.FromBase64String(base64Str);
+            using (var imageFile = new FileStream(filePath, FileMode.Create))
+            {
+                imageFile.Write(bytes, 0, bytes.Length);
+                imageFile.Flush();
+            }
+
+            var image = Image.FromFile(filePath);
+
+            var thumbnail = (Image)new Bitmap(image, new Size(200, 200));
+
+            thumbnail.Save(filePathThumbnail);
+
+            var urlPath = GetUrlPath(FileManager.RELATIVE_PATH, fileName);
+            var urlPathThumbnail = GetUrlPath(FileManager.RELATIVE_PATH_THUMBNAIL, fileName);
+
+            var fileInfo = new FileInfo(filePath);
+
+            var file = new File
+                       {
+                           Extension = model.Extension,
+                           FilePath = urlPath,
+                           ThumbnailPath = urlPathThumbnail,
+                           Size = (int)(fileInfo.Length / 1024),
+                           RowState = RowState.Created,
+                           UploadedAt = DateTime.Now,
+                           UploadedBy = userId,
+                           Name = fileName
+            };
+
+            _fileManager.Add(file);
+
             return Ok(Mapper.Map<FileViewModel>(file));
         }
 
@@ -100,7 +240,8 @@ namespace Gallery.Controllers
                            UploadedAt = DateTime.Now,
                            Extension = extension,
                            FilePath = path,
-                           ThumbnailPath = thumbnailPath
+                           ThumbnailPath = thumbnailPath,
+                           Name = fileName
                        };
 
             _fileManager.Add(file);
@@ -121,9 +262,17 @@ namespace Gallery.Controllers
             if (file == null)
                 return NotFound();
 
-            _fileManager.Delete(file);
+            _fileManager.Delete(file.Id);
 
             return Ok();
+        }
+
+        public static string GetUrlPath(string relativePath, string fileName)
+        {
+            relativePath = relativePath.Replace('\\', '/');
+            relativePath += '/' + fileName;
+
+            return Startup.SITE_LOCATION + relativePath;
         }
     }
 }

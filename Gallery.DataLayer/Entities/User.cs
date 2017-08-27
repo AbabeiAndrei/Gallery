@@ -21,7 +21,7 @@ namespace Gallery.DataLayer.Entities
     {
         [Alias("id")]
         [AutoIncrement]
-        public int Id { get; set; }
+        public override int Id { get; set; }
 
         [Required]
         [Alias("email")]
